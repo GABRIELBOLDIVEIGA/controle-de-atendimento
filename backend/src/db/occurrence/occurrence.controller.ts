@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { OccurrenceService } from './occurrence.service';
 import { CreateOccurrenceDto } from './dto/create-occurrence.dto';
 import { UpdateOccurrenceDto } from './dto/update-occurrence.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Occurrence')
 @Controller('occurrence')
 export class OccurrenceController {
   constructor(private readonly occurrenceService: OccurrenceService) {}
@@ -23,7 +33,10 @@ export class OccurrenceController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOccurrenceDto: UpdateOccurrenceDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateOccurrenceDto: UpdateOccurrenceDto,
+  ) {
     return this.occurrenceService.update(+id, updateOccurrenceDto);
   }
 
