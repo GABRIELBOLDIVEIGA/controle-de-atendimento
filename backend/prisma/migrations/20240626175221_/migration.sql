@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE `Cliente` MODIFY `ativo` INTEGER NOT NULL DEFAULT 1,
-    MODIFY `obs` VARCHAR(255) NULL;

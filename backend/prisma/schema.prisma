@@ -5,116 +5,23 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Permissao {
-  id Int @id @default(autoincrement())
-
-  nome String @unique
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt()
-  deletedAt DateTime?
-
-  Usuario Usuario[]
+enum Role {
+  DEV
+  ADMIN
+  USER
 }
 
-model Empresa {
-  id Int @id @default(autoincrement())
-
-  nome String @unique
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt()
-  deletedAt DateTime?
-
-  Usuario     Usuario[]
-  Ocorrencia  Ocorrencia[]
-  Ocorrencia2 Ocorrencia2[]
-  Cliente     Cliente[]
-
-  // Cliente     Cliente[]
-  // Atendimento Atendimento[]
-  // Ocorrencia2 Ocorrencia2?
-  Atendimento Atendimento[]
-}
-
-model Usuario {
-  id    Int    @id @default(autoincrement())
-  nome  String
-  email String @unique
-  senha String
-
-  ativo Int
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt()
-  deletedAt DateTime?
-
-  permissaoId Int
-  empresaId   Int
-
-  // Cliente     Cliente[]
-  // Atendimento Atendimento[]
-  Permissao   Permissao     @relation(fields: [permissaoId], references: [id])
-  Empresa     Empresa       @relation(fields: [empresaId], references: [id])
-  Cliente     Cliente[]
-  Atendimento Atendimento[]
-
-  @@index([empresaId], name: "empresaId")
-  @@index([permissaoId], name: "permissaoId")
-}
-
-model Ocorrencia {
-  id Int @id @default(autoincrement())
-
-  nome String @unique
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt()
-  deletedAt DateTime?
-
-  Empresa   Empresa @relation(fields: [empresaId], references: [id])
-  empresaId Int
-
-  // Atendimento   Atendimento[]
-  Atendimento Atendimento[]
-
-  @@index([empresaId], name: "empresaId")
-}
-
-model Ocorrencia2 {
-  id Int @id @default(autoincrement())
-
-  nome String @unique
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt()
-  deletedAt DateTime?
-
-  Empresa   Empresa @relation(fields: [empresaId], references: [id])
-  empresaId Int
-
-  // Atendimento   Atendimento[]
-
-  @@index([empresaId], name: "empresaId")
-}
-
-model Cliente {
-  id Int @id @default(autoincrement())
-
-  nome  String
-  email String?
-  tel1  String?
-  tel2  String?
-  tel3  String?
-
+model Adress {
+  id          Int     @id @default(autoincrement())
   cep         String?
   logradouro  String?
   complemento String?
@@ -123,63 +30,203 @@ model Cliente {
   uf          String?
   numero      String?
 
-  ativo Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt()
 
-  preferencia_horario DateTime? @db.Time(4)
-  primeiro_contato    DateTime?
-  ultimo_contato      DateTime?
-  proximo_contato     DateTime?
-
-  origem      String?
-  obs         String? @db.VarChar(255)
-  contato     String?
-  concorrente String?
-
-  cnpj String? @unique
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now()) @updatedAt()
-  deletedAt DateTime?
-
-  Empresa   Empresa @relation(fields: [empresaId], references: [id])
-  empresaId Int
-
-  Usuario     Usuario       @relation(fields: [usuarioId], references: [id])
-  usuarioId   Int
-  Atendimento Atendimento[]
-
-  @@index([empresaId], name: "empresaId")
-  @@index([usuarioId], name: "usuarioId")
+  customerAdress CustomerAdress[]
+  userAddress    UserAddress[]
 }
 
-model Atendimento {
-  id Int @id @default(autoincrement())
-
-  observacoes String?
-
-  inicio DateTime
-  fim    DateTime
-
-  is_deleted Boolean @default(false)
+model Occurrence {
+  id   Int    @id @default(autoincrement())
+  name String
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @default(now()) @updatedAt()
   deletedAt DateTime?
 
-  Empresa   Empresa @relation(fields: [empresaId], references: [id])
-  empresaId Int
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
 
-  Usuario   Usuario @relation(fields: [usuarioId], references: [id])
-  usuarioId Int
+  contact Contact[]
 
-  Ocorrencia   Ocorrencia @relation(fields: [ocorrenciaId], references: [id])
-  ocorrenciaId Int
+  @@unique([companyId, name])
+}
 
-  Cliente   Cliente @relation(fields: [clienteId], references: [id])
-  clienteId Int
+model OtherOccurrence {
+  id   Int    @id @default(autoincrement())
+  name String
 
-  @@index([clienteId], name: "clienteId")
-  @@index([ocorrenciaId], name: "ocorrenciaId")
-  @@index([empresaId], name: "empresaId")
-  @@index([usuarioId], name: "usuarioId")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  CustomerContact Contact[]
+}
+
+model Company {
+  id   Int    @id @default(autoincrement())
+  uuid String @unique() @default(uuid())
+  name String @unique()
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  userCompany     UserCompany[]
+  occurrence      Occurrence[]
+  otherOccurrence OtherOccurrence[]
+  schedule        Schedule[]
+  customerCompany CustomerCompany[]
+  Contact         Contact[]
+}
+
+model Schedule {
+  id Int @id @default(autoincrement())
+
+  time_preference DateTime? @db.Time(4)
+  next_return     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt()
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int      @unique()
+}
+
+model Contact {
+  id Int @id @default(autoincrement())
+
+  start DateTime
+  end   DateTime
+
+  comments String?
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  occurrence   Occurrence @relation(fields: [occurrenceId], references: [id])
+  occurrenceId Int
+
+  otherOccurrence   OtherOccurrence? @relation(fields: [otherOccurrenceId], references: [id])
+  otherOccurrenceId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt()
+}
+
+// User
+model User {
+  id       Int    @id @default(autoincrement())
+  name     String
+  email    String @unique
+  password String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  role Role @default(USER)
+
+  userCompany     UserCompany[]
+  customerUser    CustomerUser[]
+  userAddress     UserAddress[]
+  customerContact Contact[]
+}
+
+model UserAddress {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  address   Adress @relation(fields: [addressId], references: [id])
+  addressId Int
+
+  @@unique([userId, addressId])
+  @@unique([addressId])
+}
+
+model UserCompany {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+}
+
+// Customer
+model Customer {
+  id            Int       @id @default(autoincrement())
+  name          String
+  email         String?
+  phone1        String?
+  phone2        String?
+  phone3        String?
+  origin        String?
+  person        String?
+  competitor    String?
+  comments      String?
+  first_contact DateTime?
+  last_contact  DateTime?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  customerUser    CustomerUser[]
+  customerAdress  CustomerAdress[]
+  Schedule        Schedule[]
+  customerCompany CustomerCompany[]
+  customerContact Contact[]
+}
+
+model CustomerCompany {
+  id Int @id @default(autoincrement())
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  company   Company @relation(fields: [companyId], references: [id])
+  companyId Int
+}
+
+model CustomerAdress {
+  id Int @id @default(autoincrement())
+
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId Int
+
+  address   Adress @relation(fields: [addressId], references: [id])
+  addressId Int
+
+  @@unique([customerId, addressId])
+  @@unique([addressId])
+}
+
+model CustomerUser {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+
+  @@index([customerId])
+  @@index([userId])
 }
