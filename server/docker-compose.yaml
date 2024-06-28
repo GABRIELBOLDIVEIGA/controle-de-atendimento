@@ -1,0 +1,18 @@
+
+services:
+  pocardevender_teste:
+    container_name: pocardevender_teste
+    image: mysql:8.0
+    env_file:
+      - .env
+    environment:
+      
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    volumes:
+      - pocardevender_teste-datavolume:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  pocardevender_teste-datavolume:
+    

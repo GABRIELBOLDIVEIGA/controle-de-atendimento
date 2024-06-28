@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Permissao {
+  id Int @id @default(autoincrement())
+
+  nome String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  Usuario Usuario[]
+}
+
+model Empresa {
+  id Int @id @default(autoincrement())
+
+  nome String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  Usuario     Usuario[]
+  Ocorrencia  Ocorrencia[]
+  Ocorrencia2 Ocorrencia2[]
+  Cliente     Cliente[]
+
+  // Cliente     Cliente[]
+  // Atendimento Atendimento[]
+  // Ocorrencia2 Ocorrencia2?
+  Atendimento Atendimento[]
+}
+
+model Usuario {
+  id    Int    @id @default(autoincrement())
+  nome  String
+  email String @unique
+  senha String
+
+  ativo Int
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  permissaoId Int
+  empresaId   Int
+
+  // Cliente     Cliente[]
+  // Atendimento Atendimento[]
+  Permissao   Permissao     @relation(fields: [permissaoId], references: [id])
+  Empresa     Empresa       @relation(fields: [empresaId], references: [id])
+  Cliente     Cliente[]
+  Atendimento Atendimento[]
+
+  @@index([empresaId], name: "empresaId")
+  @@index([permissaoId], name: "permissaoId")
+}
+
+model Ocorrencia {
+  id Int @id @default(autoincrement())
+
+  nome String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  Empresa   Empresa @relation(fields: [empresaId], references: [id])
+  empresaId Int
+
+  // Atendimento   Atendimento[]
+  Atendimento Atendimento[]
+
+  @@index([empresaId], name: "empresaId")
+}
+
+model Ocorrencia2 {
+  id Int @id @default(autoincrement())
+
+  nome String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  Empresa   Empresa @relation(fields: [empresaId], references: [id])
+  empresaId Int
+
+  // Atendimento   Atendimento[]
+
+  @@index([empresaId], name: "empresaId")
+}
+
+model Cliente {
+  id Int @id @default(autoincrement())
+
+  nome  String
+  email String?
+  tel1  String?
+  tel2  String?
+  tel3  String?
+
+  cep         String?
+  logradouro  String?
+  complemento String?
+  bairro      String?
+  localidade  String?
+  uf          String?
+  numero      String?
+
+  ativo Int @default(1)
+
+  preferencia_horario DateTime? @db.Time(4)
+  primeiro_contato    DateTime?
+  ultimo_contato      DateTime?
+  proximo_contato     DateTime?
+
+  origem      String?
+  obs         String? @db.VarChar(255)
+  contato     String?
+  concorrente String?
+
+  cnpj String? @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  Empresa   Empresa @relation(fields: [empresaId], references: [id])
+  empresaId Int
+
+  Usuario     Usuario       @relation(fields: [usuarioId], references: [id])
+  usuarioId   Int
+  Atendimento Atendimento[]
+
+  @@index([empresaId], name: "empresaId")
+  @@index([usuarioId], name: "usuarioId")
+}
+
+model Atendimento {
+  id Int @id @default(autoincrement())
+
+  observacoes String?
+
+  inicio DateTime
+  fim    DateTime
+
+  is_deleted Boolean @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt()
+  deletedAt DateTime?
+
+  Empresa   Empresa @relation(fields: [empresaId], references: [id])
+  empresaId Int
+
+  Usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  usuarioId Int
+
+  Ocorrencia   Ocorrencia @relation(fields: [ocorrenciaId], references: [id])
+  ocorrenciaId Int
+
+  Cliente   Cliente @relation(fields: [clienteId], references: [id])
+  clienteId Int
+
+  @@index([clienteId], name: "clienteId")
+  @@index([ocorrenciaId], name: "ocorrenciaId")
+  @@index([empresaId], name: "empresaId")
+  @@index([usuarioId], name: "usuarioId")
+}
