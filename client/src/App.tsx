@@ -1,10 +1,10 @@
 import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import "./App.css";
 import { Button } from "./components/ui/button";
 import { useToast } from "./components/ui/use-toast";
 import { ToastAction } from "./components/ui/toast";
+import { Input } from "./components/ui/input";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -12,7 +12,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="bg-bg">
         <a href="https://vitejs.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -26,7 +26,7 @@ function App() {
           count is {count}
         </button>
         <Button>Teste</Button>
-
+        <Input />
         <Button
           variant="noShadow"
           onClick={() => {
@@ -49,6 +49,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      Click on the Vite and React logos to learn more
     </>
   );
 }
