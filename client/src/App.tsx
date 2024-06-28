@@ -3,9 +3,12 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { Button } from "./components/ui/button";
+import { useToast } from "./components/ui/use-toast";
+import { ToastAction } from "./components/ui/toast";
 
 function App() {
   const [count, setCount] = useState(0);
+  const { toast } = useToast();
 
   return (
     <>
@@ -23,6 +26,22 @@ function App() {
           count is {count}
         </button>
         <Button>Teste</Button>
+
+        <Button
+          variant="noShadow"
+          onClick={() => {
+            toast({
+              title: "Scheduled: Catch up ",
+              description: "Friday, February 10, 2023 at 5:57 PM",
+              action: (
+                <ToastAction altText="Goto schedule to undo">Undo</ToastAction>
+              ),
+            });
+          }}
+        >
+          Default
+        </Button>
+
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
