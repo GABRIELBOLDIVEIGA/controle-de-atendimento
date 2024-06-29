@@ -113,10 +113,11 @@ export class ContactService {
 
     return contacts;
   }
-  async findAllByCustomerId(customerId: number) {
+  async findAllByCustomerId(customerId: number, companyId: number) {
     const contacts = await this.prisma.contact.findMany({
       where: {
         customerId,
+        companyId,
       },
       include: {
         company: true,
@@ -134,10 +135,11 @@ export class ContactService {
 
     return contacts;
   }
-  async findAllByUserId(userId: number) {
+  async findAllByUserId(userId: number, companyId: number) {
     const contacts = await this.prisma.contact.findMany({
       where: {
         userId,
+        companyId,
       },
       include: {
         company: true,
@@ -156,10 +158,11 @@ export class ContactService {
     return contacts;
   }
 
-  async findOne(id: number) {
+  async findOne(contactId: number, companyId: number) {
     const contact = await this.prisma.contact.findUnique({
       where: {
-        id,
+        id: contactId,
+        companyId,
       },
       include: {
         company: true,
