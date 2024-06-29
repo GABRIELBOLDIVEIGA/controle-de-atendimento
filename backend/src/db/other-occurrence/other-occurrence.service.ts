@@ -39,15 +39,6 @@ export class OtherOccurrenceService {
     });
   }
 
-  // async findOne(id: number) {
-  //   return await this.prisma.client.otherOccurrence.findFirst({
-  //     where: {
-  //       id,
-  //     },
-  //     include: { company: true },
-  //   });
-  // }
-
   async findOne(occurrenceId: number, companyId: number) {
     const occurence = await this.prisma.client.otherOccurrence.findFirst({
       where: {
@@ -63,26 +54,6 @@ export class OtherOccurrenceService {
     return occurence;
   }
 
-  // async update(id: number, updateOtherOccurrenceDto: UpdateOtherOccurrenceDto) {
-  //   const existe = await this.prisma.otherOccurrence.findFirst({
-  //     where: {
-  //       name: updateOtherOccurrenceDto.name,
-  //       companyId: updateOtherOccurrenceDto.companyId,
-  //     },
-  //   });
-  //   if (existe) {
-  //     throw new BadRequestException('This occurrence already exists');
-  //   }
-
-  //   return await this.prisma.otherOccurrence.update({
-  //     where: {
-  //       id,
-  //     },
-  //     data: {
-  //       name: updateOtherOccurrenceDto.name,
-  //     },
-  //   });
-  // }
   async update(id: number, updateOtherOccurrenceDto: UpdateOtherOccurrenceDto) {
     const occurrence = await this.prisma.otherOccurrence.findFirst({
       where: {
@@ -115,10 +86,6 @@ export class OtherOccurrenceService {
       },
     });
   }
-
-  // async remove(id: number) {
-  //   return await this.prisma.client.otherOccurrence.delete({ id });
-  // }
 
   async remove(occurrenceId: number, companyId: number) {
     const occurence = await this.prisma.client.otherOccurrence.findFirst({

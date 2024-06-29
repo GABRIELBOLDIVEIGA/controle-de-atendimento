@@ -2,6 +2,7 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
@@ -24,6 +25,23 @@ export class CustomerService {
     });
     if (existe) {
       throw new ForbiddenException('This customer already exists');
+    }
+
+    const [user, company] = await Promise.all([
+      this.prisma.userCompany.findFirst({
+        where: {
+          userId: createCustomerDto.userId,
+          companyId: createCustomerDto.companyId,
+        },
+      }),
+      this.prisma.company.findFirst({
+        where: {
+          id: createCustomerDto.companyId,
+        },
+      }),
+    ]);
+    if (!user || !company) {
+      throw new ForbiddenException('This user does not belong to this company');
     }
 
     try {
@@ -102,19 +120,56 @@ export class CustomerService {
     }
   }
 
-  findAll() {
-    return `This action returns all customer`;
+  async findAllByCompanyId(companyId: number) {
+    return await this.prisma.customerCompany.findMany({
+      where: {
+        companyId,
+      },
+      include: { customer: true },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOne(customerId: number, companyId: number) {
+    return await this.prisma.customerCompany.findMany({
+      where: {
+        customerId,
+        companyId,
+      },
+      include: { customer: true },
+    });
   }
 
-  async update(id: number, updateCustomerDto: UpdateCustomerDto) {
+  async update(
+    customerId: number,
+    updateCustomerDto: UpdateCustomerDto,
+    companyId: number,
+  ) {
+    const user = await this.prisma.userCompany.findFirst({
+      where: {
+        userId: updateCustomerDto.userId,
+        companyId,
+      },
+    });
+    if (!user) {
+      throw new ForbiddenException('This user does not belong to this company');
+    }
+    const customerCompany = await this.prisma.customerCompany.findFirst({
+      where: {
+        companyId,
+        customerId,
+      },
+    });
+
+    if (!customerCompany) {
+      throw new ForbiddenException(
+        'This customer does not belong to this company',
+      );
+    }
+
     try {
       return await this.prisma.customer.update({
         where: {
-          id: id,
+          id: customerId,
         },
         data: {
           name: updateCustomerDto.name,
@@ -140,15 +195,59 @@ export class CustomerService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
+  async softDelete(customerId: number, companyId: number) {
+    const customer = await this.prisma.customerCompany.findFirst({
+      where: {
+        id: customerId,
+        companyId,
+      },
+    });
+
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    try {
+      const data = await this.prisma.$transaction(async (transaction) => {
+        await transaction.schedule.delete({
+          where: {
+            customerId,
+            companyId,
+          },
+        });
+        return await transaction.customer.update({
+          where: {
+            id: customerId,
+          },
+          data: {
+            deletedAt: new Date(),
+          },
+        });
+      });
+
+      return data;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
-  // private timeToDate(str: string) {
-  //   const [hour, minute] = str.split(':');
+  async hardDelete(customerId: number, companyId: number) {
+    const customer = await this.prisma.customerCompany.findFirst({
+      where: {
+        id: customerId,
+        companyId,
+      },
+      include: { customer: true },
+    });
 
-  //   return new Date(
-  //     `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()} ${hour}:${minute}`,
-  //   );
-  // }
+    if (!customer) {
+      throw new NotFoundException('Customer not found');
+    }
+
+    return await this.prisma.customer.delete({
+      where: {
+        id: customerId,
+      },
+    });
+  }
 }

@@ -26,10 +26,6 @@ export class OtherOccurrenceController {
     private readonly otherOccurrenceService: OtherOccurrenceService,
   ) {}
 
-  // @Post()
-  // create(@Body() createOtherOccurrenceDto: CreateOtherOccurrenceDto) {
-  //   return this.otherOccurrenceService.create(createOtherOccurrenceDto);
-  // }
   @Post()
   @UseGuards(AuthGuard)
   create(
@@ -47,11 +43,6 @@ export class OtherOccurrenceController {
     return this.otherOccurrenceService.create(createOtherOccurrenceDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.otherOccurrenceService.findAllByCompanyId();
-  // }
-
   @Get('company/:companyId')
   @UseGuards(AuthGuard)
   findAll(@Param('companyId', ParseIntPipe) companyId: number, @Req() req) {
@@ -62,11 +53,6 @@ export class OtherOccurrenceController {
     }
     return this.otherOccurrenceService.findAllByCompanyId(companyId);
   }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.otherOccurrenceService.findOne(+id);
-  // }
 
   @Get(':otherOccurrenceId')
   @UseGuards(AuthGuard)
@@ -79,14 +65,6 @@ export class OtherOccurrenceController {
       req.user.companyId,
     );
   }
-
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateOtherOccurrenceDto: UpdateOtherOccurrenceDto,
-  // ) {
-  //   return this.otherOccurrenceService.update(+id, updateOtherOccurrenceDto);
-  // }
 
   @Patch(':otherOccurrenceId')
   @UseGuards(AuthGuard)
@@ -106,11 +84,6 @@ export class OtherOccurrenceController {
       updateOtherOccurrenceDto,
     );
   }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.otherOccurrenceService.remove(+id);
-  // }
 
   @Delete(':otherOccurrenceId/:companyId')
   @UseGuards(AuthGuard)
