@@ -68,7 +68,7 @@ export class CustomerService {
         ) {
           await transaction.schedule.create({
             data: {
-              time_preference: this.toTime(
+              time_preference: this.timeToDate(
                 createCustomerDto.schedule.time_preference,
               ),
               next_return: new Date(createCustomerDto.schedule.next_return),
@@ -108,15 +108,41 @@ export class CustomerService {
     return `This action returns a #${id} customer`;
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  async update(id: number, updateCustomerDto: UpdateCustomerDto) {
+    try {
+      return await this.prisma.customer.update({
+        where: {
+          id: id,
+        },
+        data: {
+          name: updateCustomerDto.name,
+          email: updateCustomerDto.email,
+          phone1: updateCustomerDto.phone1,
+          phone2: updateCustomerDto.phone2,
+          phone3: updateCustomerDto.phone3,
+          origin: updateCustomerDto.origin,
+          person: updateCustomerDto.person,
+          competitor: updateCustomerDto.competitor,
+          comments: updateCustomerDto.comments,
+          first_contact: updateCustomerDto.first_contact
+            ? new Date(updateCustomerDto.first_contact)
+            : null,
+          last_contact: updateCustomerDto.last_contact
+            ? new Date(updateCustomerDto.last_contact)
+            : null,
+          document: updateCustomerDto.document,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
   remove(id: number) {
     return `This action removes a #${id} customer`;
   }
 
-  private toTime(str: string) {
+  private timeToDate(str: string) {
     const [hour, minute] = str.split(':');
 
     return new Date(
