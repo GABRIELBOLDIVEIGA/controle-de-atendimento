@@ -152,7 +152,7 @@ model UserAddress {
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
-  address   Adress @relation(fields: [addressId], references: [id])
+  address   Adress @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId Int
 
   @@unique([userId, addressId])
@@ -215,7 +215,7 @@ model CustomerAdress {
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   customerId Int
 
-  address   Adress @relation(fields: [addressId], references: [id])
+  address   Adress @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId Int
 
   @@unique([customerId, addressId])
