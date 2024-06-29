@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,7 +13,7 @@ export class ScheduleService {
   constructor(private prisma: PrismaService) {}
 
   async create(createScheduleDto: CreateScheduleDto) {
-    const [companyCustomer, scheduleCustomer] = await Promise.all([
+    const [companyCustomer, scheduleCustomer, userCompany] = await Promise.all([
       this.prisma.customerCompany.findFirst({
         where: {
           customerId: createScheduleDto.customerId,
@@ -26,11 +30,18 @@ export class ScheduleService {
           companyId: createScheduleDto.companyId,
         },
       }),
+      this.prisma.userCompany.findFirst({
+        where: {
+          userId: createScheduleDto.userId,
+          companyId: createScheduleDto.companyId,
+        },
+      }),
     ]);
 
-    if (!companyCustomer) {
+    if (!companyCustomer)
       throw new NotFoundException('Company or Customer not found');
-    }
+
+    if (!userCompany) throw new NotFoundException('User or Company not found');
 
     if (!scheduleCustomer) {
       return await this.prisma.schedule.create({
@@ -65,19 +76,21 @@ export class ScheduleService {
     });
   }
 
-  async findAllByUserId(userId: number) {
+  async findAllByUserId(userId: number, companyId: number) {
     return await this.prisma.schedule.findMany({
       where: {
-        userId: userId,
+        userId,
+        companyId,
       },
       include: { customer: true, user: { select: { id: true, name: true } } },
     });
   }
 
-  async findOneByCustomerId(customerId: number) {
+  async findOneByCustomerId(customerId: number, companyId: number) {
     return await this.prisma.schedule.findFirst({
       where: {
-        customerId: customerId,
+        customerId,
+        companyId,
       },
       include: { customer: true, user: { select: { id: true, name: true } } },
     });
@@ -111,12 +124,49 @@ export class ScheduleService {
     });
   }
 
-  async remove(companyId: number, customerId: number) {
-    return await this.prisma.schedule.delete({
+  async remove(companyId: number, customerId: number, userId: number) {
+    const schedule = await this.prisma.schedule.findFirst({
       where: {
-        customerId: customerId,
-        companyId: companyId,
+        customerId,
+        companyId,
+        userId,
       },
     });
+
+    if (!schedule) throw new NotFoundException('Schedule not found');
+
+    try {
+      return await this.prisma.schedule.delete({
+        where: {
+          customerId,
+          companyId,
+          userId,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async admRevome(companyId: number, customerId: number) {
+    const schedule = await this.prisma.schedule.findFirst({
+      where: {
+        customerId,
+        companyId,
+      },
+    });
+
+    if (!schedule) throw new NotFoundException('Schedule not found');
+
+    try {
+      return await this.prisma.schedule.delete({
+        where: {
+          customerId: customerId,
+          companyId: companyId,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

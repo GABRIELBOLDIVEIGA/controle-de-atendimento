@@ -233,7 +233,7 @@ model CustomerUser {
   userId Int
 
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
-  customerId Int
+  customerId Int      @unique()
 
   @@index([customerId])
   @@index([userId])
