@@ -1,8 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { CreateScheduleDto } from './dto/create-schedule.dto';
 import { UpdateScheduleDto } from './dto/update-schedule.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Schedule')
 @Controller('schedule')
 export class ScheduleController {
   constructor(private readonly scheduleService: ScheduleService) {}
@@ -12,23 +23,39 @@ export class ScheduleController {
     return this.scheduleService.create(createScheduleDto);
   }
 
-  @Get()
-  findAll() {
-    return this.scheduleService.findAll();
+  @Get('company/:companyId')
+  findAll(@Param('companyId', ParseIntPipe) companyId: number) {
+    return this.scheduleService.findAllByCompanyId(companyId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.scheduleService.findOne(+id);
+  @Get('customer/:customerId')
+  findOne(@Param('customerId', ParseIntPipe) customerId: number) {
+    return this.scheduleService.findOneByCustomerId(customerId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateScheduleDto: UpdateScheduleDto) {
-    return this.scheduleService.update(+id, updateScheduleDto);
+  @Get('user/:userId')
+  findAllByUserId(@Param('userId', ParseIntPipe) userId: number) {
+    return this.scheduleService.findAllByUserId(userId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.scheduleService.remove(+id);
+  @Patch(':companyId/:customerId')
+  update(
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Param('customerId', ParseIntPipe) customerId: number,
+    @Body() updateScheduleDto: UpdateScheduleDto,
+  ) {
+    return this.scheduleService.update(
+      companyId,
+      customerId,
+      updateScheduleDto,
+    );
+  }
+
+  @Delete(':companyId/:customerId')
+  remove(
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Param('customerId', ParseIntPipe) customerId: number,
+  ) {
+    return this.scheduleService.remove(companyId, customerId);
   }
 }

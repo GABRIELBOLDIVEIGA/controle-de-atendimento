@@ -6,6 +6,7 @@ import {
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { timeToDate } from 'src/helper/timeToDate';
 
 @Injectable()
 export class CustomerService {
@@ -68,12 +69,13 @@ export class CustomerService {
         ) {
           await transaction.schedule.create({
             data: {
-              time_preference: this.timeToDate(
+              time_preference: timeToDate(
                 createCustomerDto.schedule.time_preference,
               ),
               next_return: new Date(createCustomerDto.schedule.next_return),
               customerId: customer.id,
               companyId: createCustomerDto.companyId,
+              userId: createCustomerDto.userId,
             },
           });
         }
@@ -142,11 +144,11 @@ export class CustomerService {
     return `This action removes a #${id} customer`;
   }
 
-  private timeToDate(str: string) {
-    const [hour, minute] = str.split(':');
+  // private timeToDate(str: string) {
+  //   const [hour, minute] = str.split(':');
 
-    return new Date(
-      `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()} ${hour}:${minute}`,
-    );
-  }
+  //   return new Date(
+  //     `${new Date().getFullYear()}-${new Date().getMonth()}-${new Date().getDate()} ${hour}:${minute}`,
+  //   );
+  // }
 }

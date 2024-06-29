@@ -98,6 +98,9 @@ model Schedule {
 
   customer   Customer @relation(fields: [customerId], references: [id])
   customerId Int      @unique()
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
 }
 
 model Contact {
@@ -144,6 +147,7 @@ model User {
   customerUser    CustomerUser[]
   userAddress     UserAddress[]
   customerContact Contact[]
+  Schedule        Schedule[]
 }
 
 model UserAddress {
