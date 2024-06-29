@@ -6,13 +6,19 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  ParseIntPipe,
+  Req,
+  ForbiddenException,
 } from '@nestjs/common';
 import { CompanyService } from './company.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @ApiTags('Company')
+@ApiBearerAuth('JWT-auth')
 @Controller('company')
 export class CompanyController {
   constructor(private readonly companyService: CompanyService) {}
@@ -22,23 +28,47 @@ export class CompanyController {
     return this.companyService.create(createCompanyDto);
   }
 
-  @Get()
-  findAll() {
-    return this.companyService.findAll();
+  // @Get()
+  // findAll() {
+  //   return this.companyService.findAll();
+  // }
+
+  @Get(':companyId')
+  @UseGuards(AuthGuard)
+  findOne(@Param('companyId', ParseIntPipe) companyId: number, @Req() req) {
+    if (req.user.companyId != companyId) {
+      throw new ForbiddenException(
+        'User does not have permission to access this resource',
+      );
+    }
+
+    return this.companyService.findOne(companyId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.companyService.findOne(+id);
+  @Patch(':companyId')
+  @UseGuards(AuthGuard)
+  update(
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Body() updateCompanyDto: UpdateCompanyDto,
+    @Req() req,
+  ) {
+    if (req.user.companyId != companyId) {
+      throw new ForbiddenException(
+        'User does not have permission to access this resource',
+      );
+    }
+
+    return this.companyService.update(companyId, updateCompanyDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCompanyDto: UpdateCompanyDto) {
-    return this.companyService.update(+id, updateCompanyDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.companyService.remove(+id);
+  @Delete(':companyId')
+  @UseGuards(AuthGuard)
+  remove(@Param('companyId', ParseIntPipe) companyId: number, @Req() req) {
+    if (req.user.companyId != companyId) {
+      throw new ForbiddenException(
+        'User does not have permission to access this resource',
+      );
+    }
+    return this.companyService.remove(companyId);
   }
 }

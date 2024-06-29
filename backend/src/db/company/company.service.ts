@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -27,16 +31,16 @@ export class CompanyService {
     return company;
   }
 
-  async findAll() {
-    return await this.prismaService.client.company.findMany();
-  }
-
   async findOne(id: number) {
-    return await this.prismaService.company.findUnique({
+    const company = await this.prismaService.client.company.findUnique({
       where: {
         id: id,
       },
     });
+    if (!company) {
+      throw new NotFoundException('Company not found');
+    }
+    return company;
   }
 
   async update(id: number, updateCompanyDto: UpdateCompanyDto) {
