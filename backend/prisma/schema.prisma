@@ -20,7 +20,7 @@ enum Role {
   USER
 }
 
-model Adress {
+model Address {
   id          Int     @id @default(autoincrement())
   cep         String?
   logradouro  String?
@@ -30,11 +30,16 @@ model Adress {
   uf          String?
   numero      String?
 
+  // company   Company @relation(fields: [companyId], references: [id])
+  // companyId Int
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt()
 
   customerAdress CustomerAdress[]
   userAddress    UserAddress[]
+
+  @@map("Adress")
 }
 
 model Occurrence {
@@ -82,6 +87,7 @@ model Company {
   schedule        Schedule[]
   customerCompany CustomerCompany[]
   Contact         Contact[]
+  // Address         Address[]
 }
 
 model Schedule {
@@ -156,7 +162,7 @@ model UserAddress {
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId Int
 
-  address   Adress @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId Int
 
   @@unique([userId, addressId])
@@ -219,7 +225,7 @@ model CustomerAdress {
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   customerId Int
 
-  address   Adress @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  address   Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId Int
 
   @@unique([customerId, addressId])

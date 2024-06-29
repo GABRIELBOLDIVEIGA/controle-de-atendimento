@@ -28,11 +28,6 @@ export class CompanyController {
     return this.companyService.create(createCompanyDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.companyService.findAll();
-  // }
-
   @Get(':companyId')
   @UseGuards(AuthGuard)
   findOne(@Param('companyId', ParseIntPipe) companyId: number, @Req() req) {

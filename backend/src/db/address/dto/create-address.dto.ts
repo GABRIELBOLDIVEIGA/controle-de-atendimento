@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsInt, IsOptional, IsString, MaxLength } from 'class-validator';
 
-export class CreateAdressDto {
+export class CreateAddressDto {
   @ApiProperty({
     description: 'CEP',
     example: '00000-000',

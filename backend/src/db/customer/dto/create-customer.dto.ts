@@ -8,7 +8,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { CreateAdressDto } from 'src/db/adress/dto/create-adress.dto';
+import { CreateAddressDto } from 'src/db/address/dto/create-address.dto';
 
 class Schedule {
   @ApiProperty({
@@ -166,6 +166,6 @@ export class CreateCustomerDto {
     description: 'Endereço',
     required: true,
   })
-  @Type(() => CreateAdressDto)
-  adress: CreateAdressDto;
+  @Type(() => CreateAddressDto)
+  adress: CreateAddressDto;
 }

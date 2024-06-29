@@ -99,7 +99,7 @@ export class CustomerService {
         }
 
         if (createCustomerDto.adress) {
-          const adress = await transaction.adress.create({
+          const adress = await transaction.address.create({
             data: createCustomerDto.adress,
           });
 
