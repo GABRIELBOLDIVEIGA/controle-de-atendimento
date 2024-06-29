@@ -51,7 +51,7 @@ export class OccurrenceService {
       throw new NotFoundException('Occurrence not found');
     }
 
-    return;
+    return occurence;
   }
 
   async update(id: number, updateOccurrenceDto: UpdateOccurrenceDto) {
@@ -63,6 +63,18 @@ export class OccurrenceService {
     });
     if (occurrence) {
       throw new BadRequestException('This occurrence already exists');
+    }
+
+    const belongCompany = await this.prisma.occurrence.findFirst({
+      where: {
+        id: id,
+        companyId: updateOccurrenceDto.companyId,
+      },
+    });
+    if (!belongCompany) {
+      throw new BadRequestException(
+        'This occurrence does not belong to this company',
+      );
     }
 
     return await this.prisma.occurrence.update({
