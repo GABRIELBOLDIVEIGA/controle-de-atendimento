@@ -31,16 +31,33 @@ export class UserService {
 
     const hash_password = await bcrypt.hash(createAdmUserDto.password, 12);
 
-    const { password, ...user } = await this.prismaService.client.user.create({
-      data: {
-        name: createAdmUserDto.name,
-        email: createAdmUserDto.email,
-        password: hash_password,
-        role: Role.ADMIN,
-      },
-    });
+    return await this.prismaService.client.$transaction(async (transaction) => {
+      const { password, ...user } = await this.prismaService.client.user.create(
+        {
+          data: {
+            name: createAdmUserDto.name,
+            email: createAdmUserDto.email,
+            password: hash_password,
+            role: Role.ADMIN,
+          },
+        },
+      );
 
-    return user;
+      const company = await transaction.company.create({
+        data: {
+          name: `Empresa ${createAdmUserDto.name}`,
+        },
+      });
+
+      await transaction.userCompany.create({
+        data: {
+          userId: user.id,
+          companyId: company.id,
+        },
+      });
+
+      return user;
+    });
   }
 
   async createUser(createUserDto: CreateUserDto) {
@@ -118,7 +135,7 @@ export class UserService {
     });
   }
 
-  async remove(id: number) {
-    return await this.prismaService.client.user.delete({ id });
+  async remove(userId: number) {
+    return await this.prismaService.client.user.delete({ id: userId });
   }
 }

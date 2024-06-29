@@ -17,6 +17,62 @@ export class AuthService {
   ) {}
 
   async login(loginDto: LoginDto) {
-    return loginDto;
+    const userCompany = await this.prismaService.userCompany.findFirst({
+      where: {
+        user: {
+          email: loginDto.email,
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (!userCompany) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(
+      loginDto.password,
+      userCompany.user.password,
+    );
+
+    if (!isPasswordCorrect) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const payload = {
+      userId: userCompany.user.id,
+      email: userCompany.user.email,
+      companyId: userCompany.companyId,
+      role: userCompany.user.role,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      accessToken,
+    };
   }
+
+  // async changePassword(changePasswordDto: ChangePasswordDto) {
+  //   const user = await this.prismaService.user.findUnique({
+  //     where: {
+  //       email: changePasswordDto.email,
+  //     },
+  //   });
+
+  //   if (!user) {
+  //     throw new BadRequestException('Invalid credentials');
+  //   }
+
+  //   const isPasswordCorrect = await bcrypt.compare(
+  //     changePasswordDto.oldPassword,
+  //     user.password,
+  //   );
+
+  //   if (!isPasswordCorrect) {
+  //     throw new UnauthorizedException('Invalid credentials');
+  //   }
+  // }
 }
