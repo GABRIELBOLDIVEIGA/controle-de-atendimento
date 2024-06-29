@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateOccurrenceDto } from './dto/create-occurrence.dto';
 import { UpdateOccurrenceDto } from './dto/update-occurrence.dto';
@@ -30,27 +31,37 @@ export class OccurrenceService {
     });
   }
 
-  findAll() {
-    return `This action returns all occurrence`;
-  }
-
-  async findOne(id: number) {
-    return await this.prisma.client.occurrence.findFirst({
+  async findAllByCompanyId(companyId: number) {
+    return await this.prisma.client.occurrence.findMany({
       where: {
-        id,
+        companyId,
       },
-      include: { company: true },
     });
   }
 
+  async findOne(occurrenceId: number, companyId: number) {
+    const occurence = await this.prisma.client.occurrence.findFirst({
+      where: {
+        id: occurrenceId,
+        companyId,
+      },
+      include: { company: true },
+    });
+    if (!occurence) {
+      throw new NotFoundException('Occurrence not found');
+    }
+
+    return;
+  }
+
   async update(id: number, updateOccurrenceDto: UpdateOccurrenceDto) {
-    const existe = await this.prisma.occurrence.findFirst({
+    const occurrence = await this.prisma.occurrence.findFirst({
       where: {
         name: updateOccurrenceDto.name,
         companyId: updateOccurrenceDto.companyId,
       },
     });
-    if (existe) {
+    if (occurrence) {
       throw new BadRequestException('This occurrence already exists');
     }
 
@@ -64,7 +75,21 @@ export class OccurrenceService {
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.client.occurrence.delete({ id });
+  async remove(occurrenceId: number, companyId: number) {
+    const occurence = await this.prisma.client.occurrence.findFirst({
+      where: {
+        id: occurrenceId,
+        companyId,
+      },
+    });
+
+    if (!occurence) {
+      throw new NotFoundException('Occurrence not found');
+    }
+
+    return await this.prisma.client.occurrence.delete({
+      id: occurrenceId,
+      companyId,
+    });
   }
 }
