@@ -171,16 +171,18 @@ model UserCompany {
 
 // Customer
 model Customer {
-  id            Int       @id @default(autoincrement())
-  name          String
-  email         String?
-  phone1        String?
-  phone2        String?
-  phone3        String?
-  origin        String?
-  person        String?
-  competitor    String?
-  comments      String?
+  id         Int     @id @default(autoincrement())
+  name       String
+  email      String?
+  phone1     String?
+  phone2     String?
+  phone3     String?
+  origin     String?
+  person     String?
+  competitor String?
+  comments   String?
+  document   String?
+
   first_contact DateTime?
   last_contact  DateTime?
 
@@ -203,6 +205,8 @@ model CustomerCompany {
 
   company   Company @relation(fields: [companyId], references: [id])
   companyId Int
+
+  @@unique([customerId, companyId])
 }
 
 model CustomerAdress {
