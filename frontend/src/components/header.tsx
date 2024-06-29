@@ -1,4 +1,43 @@
+import { BookText, LogOut, ShieldCheck, UserRound } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { useAuthStore } from "@/store/auth.store";
+
+export const UserOptions = () => {
+  const reset = useAuthStore((store) => store.reset);
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button size="icon" variant="neutral">
+          <UserRound />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem className="flex justify-between">
+          <p>Perfil</p>
+          <BookText size={16} />
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex justify-between">
+          <p>Segurança</p>
+          <ShieldCheck size={16} />
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="flex justify-between"
+          onClick={() => reset()}
+        >
+          <p>Sair</p>
+          <LogOut size={16} />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 export const Header = () => {
   return (
@@ -10,7 +49,11 @@ export const Header = () => {
 
         <div>centro</div>
 
-        <ThemeToggle />
+        <div className="space-x-4">
+          <ThemeToggle />
+
+          <UserOptions />
+        </div>
       </div>
     </nav>
   );

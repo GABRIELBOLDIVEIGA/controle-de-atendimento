@@ -23,6 +23,12 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors({
+    allowedHeaders: ['Content-Type', 'Origin', 'Authorization'],
+    origin: ['*', 'http://localhost:5173', 'http://localhost:5173/'],
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Controle de Atendimento')
     .setDescription('API para controle de atendimento')
