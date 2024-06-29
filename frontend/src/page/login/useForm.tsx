@@ -42,7 +42,7 @@ export const useFormLogin = () => {
   const onSubmit = (data: LoginForm) => {
     mutate(data, {
       onSuccess: (resp) => {
-        navigate("/agenda");
+        navigate("/minha-agenda");
         setToken(resp.accessToken);
       },
       onError: (error) => {
