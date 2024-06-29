@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateOtherOccurrenceDto } from './dto/create-other-occurrence.dto';
 import { UpdateOtherOccurrenceDto } from './dto/update-other-occurrence.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -15,7 +19,7 @@ export class OtherOccurrenceService {
       },
     });
     if (existe) {
-      throw new Error('This occurrence already exists');
+      throw new ForbiddenException('This occurrence already exists');
     }
 
     return await this.prisma.otherOccurrence.create({

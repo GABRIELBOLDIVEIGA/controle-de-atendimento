@@ -3,7 +3,7 @@ import { AdressService } from './adress.service';
 import { UpdateAdressDto } from './dto/update-adress.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('adress')
+@ApiTags('Adress')
 @Controller('adress')
 export class AdressController {
   constructor(private readonly adressService: AdressService) {}
