@@ -36,10 +36,10 @@ model Address {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt()
 
-  customerAdress CustomerAdress[]
-  userAddress    UserAddress[]
+  customerAddress CustomerAddress[]
+  userAddress     UserAddress[]
 
-  @@map("Adress")
+  @@map("Address")
 }
 
 model Occurrence {
@@ -201,7 +201,7 @@ model Customer {
   deletedAt DateTime?
 
   customerUser    CustomerUser[]
-  customerAdress  CustomerAdress[]
+  customerAddress CustomerAddress[]
   Schedule        Schedule[]
   customerCompany CustomerCompany[]
   customerContact Contact[]
@@ -219,7 +219,7 @@ model CustomerCompany {
   @@unique([customerId, companyId])
 }
 
-model CustomerAdress {
+model CustomerAddress {
   id Int @id @default(autoincrement())
 
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
@@ -230,6 +230,7 @@ model CustomerAdress {
 
   @@unique([customerId, addressId])
   @@unique([addressId])
+  @@map("CustomerAddress")
 }
 
 model CustomerUser {

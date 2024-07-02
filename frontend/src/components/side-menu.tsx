@@ -27,6 +27,10 @@ const menuAdmin = [
     title: "Clientes",
     items: [
       {
+        title: "Todos Clientes",
+        href: "/clientes/todos-clientes",
+      },
+      {
         title: "Meus Clientes",
         href: "/clientes/meus-clientes",
       },
@@ -49,8 +53,12 @@ const menuAdmin = [
     title: "Usuários",
     items: [
       {
-        title: "Usuário",
-        href: "/usuarios/usuario",
+        title: "Todos Usuário",
+        href: "/usuarios/todos-usuarios",
+      },
+      {
+        title: "Cadastrar Usuáris",
+        href: "/usuarios/cadastrar-usuario",
       },
     ],
   },

@@ -20,7 +20,7 @@ import { CreateCustomerAddressDto } from './dto/create-customer-address.dto';
 @ApiBearerAuth('JWT-auth')
 @Controller('address')
 export class AddressController {
-  constructor(private readonly adressService: AddressService) {}
+  constructor(private readonly addressService: AddressService) {}
 
   @Post('customer-address')
   @UseGuards(AuthGuard)
@@ -28,7 +28,7 @@ export class AddressController {
     @Body() createCustomerAddressDto: CreateCustomerAddressDto,
     @Req() req,
   ) {
-    return this.adressService.createCustomerAddress(
+    return this.addressService.createCustomerAddress(
       createCustomerAddressDto,
       req.user.companyId,
     );
@@ -38,12 +38,12 @@ export class AddressController {
   @UseGuards(AuthGuard)
   update(
     @Param('addressId', ParseIntPipe) addressId: number,
-    @Body() updateAdressDto: UpdateAddressDto,
+    @Body() updateAddressDto: UpdateAddressDto,
     @Req() req,
   ) {
-    return this.adressService.update(
+    return this.addressService.update(
       addressId,
-      updateAdressDto,
+      updateAddressDto,
       req.user.companyId,
     );
   }
@@ -51,6 +51,6 @@ export class AddressController {
   @Delete(':addressId')
   @UseGuards(AuthGuard)
   remove(@Param('addressId', ParseIntPipe) addressId: number, @Req() req) {
-    return this.adressService.remove(addressId, req.user.companyId);
+    return this.addressService.remove(addressId, req.user.companyId);
   }
 }

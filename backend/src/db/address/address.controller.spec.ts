@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AddressController } from './address.controller';
 import { AddressService } from './address.service';
 
-describe('AdressController', () => {
+describe('AddressController', () => {
   let controller: AddressController;
 
   beforeEach(async () => {

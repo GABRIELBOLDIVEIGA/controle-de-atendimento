@@ -1,7 +1,9 @@
 import { Layout } from "@/layout";
-import { CadastrarCliente } from "@/page/cadastrar-cliente/cadastrar-cliente";
+import { CadastrarCliente } from "@/page/clientes/cadastrar-cliente/cadastrar-cliente";
+import { TodosClientes } from "@/page/clientes/todos-clientes/todos-clientes";
 import { CriarConta } from "@/page/criar-conta/criar-conta";
 import { Login } from "@/page/login/login";
+import { CadastrarUsuario } from "@/page/usuarios/cadastrar-usuario/cadastrar-usuario";
 import { useAuthStore } from "@/store/auth.store";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -37,12 +39,26 @@ export const AppRoutes = () => {
             </Route>
             <Route path="/clientes">
               <Route
+                path="/clientes/todos-clientes"
+                element={<TodosClientes />}
+              />
+              <Route
                 path="/clientes/meus-clientes"
                 element={<>/clientes/clientes</>}
               />
               <Route
                 path="/clientes/cadastrar-cliente"
                 element={<CadastrarCliente />}
+              />
+            </Route>
+            <Route path="/usuarios">
+              <Route
+                path="/usuarios/todos-usuarios"
+                element={<>/usuarios/todos-usuarios</>}
+              />
+              <Route
+                path="/usuarios/cadastrar-usuario"
+                element={<CadastrarUsuario />}
               />
             </Route>
           </Route>

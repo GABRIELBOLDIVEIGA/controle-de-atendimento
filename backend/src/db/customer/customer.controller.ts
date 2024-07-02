@@ -52,6 +52,18 @@ export class CustomerController {
     return this.customerService.findOne(customerId, req.user.companyId);
   }
 
+  @Get('customers-by-user/:userId')
+  @UseGuards(AuthGuard)
+  findAllByUserId(@Param('userId', ParseIntPipe) userId: number, @Req() req) {
+    if (userId !== req.user.userId) {
+      throw new ForbiddenException(
+        'User does not have permission to access this resource',
+      );
+    }
+
+    return this.customerService.findAllByUserId(req.user.userId);
+  }
+
   @Patch(':customerId')
   @UseGuards(AuthGuard)
   update(

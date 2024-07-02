@@ -44,7 +44,7 @@ export class AddressService {
           },
         });
 
-        await transaction.customerAdress.create({
+        await transaction.customerAddress.create({
           data: {
             customerId: customer.id,
             addressId: newAddress.id,
@@ -62,10 +62,10 @@ export class AddressService {
 
   async update(
     addressId: number,
-    updateAdressDto: UpdateAddressDto,
+    updateAddressDto: UpdateAddressDto,
     customerId: number,
   ) {
-    const address = await this.prisma.customerAdress.findFirst({
+    const address = await this.prisma.customerAddress.findFirst({
       where: {
         addressId,
         customerId,
@@ -73,7 +73,7 @@ export class AddressService {
     });
 
     if (!address) {
-      throw new NotFoundException('Adress not found');
+      throw new NotFoundException('Address not found');
     }
 
     try {
@@ -81,7 +81,7 @@ export class AddressService {
         where: {
           id: addressId,
         },
-        data: updateAdressDto,
+        data: updateAddressDto,
       });
     } catch (error) {
       throw new InternalServerErrorException(error);
@@ -89,7 +89,7 @@ export class AddressService {
   }
 
   async remove(addressId: number, companyId: number) {
-    const address = await this.prisma.customerAdress.findFirst({
+    const address = await this.prisma.customerAddress.findFirst({
       where: {
         addressId,
       },

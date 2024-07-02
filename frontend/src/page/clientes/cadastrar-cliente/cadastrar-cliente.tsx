@@ -17,7 +17,6 @@ import {
 import { useFormCadastrarCliente } from "./useForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Popover,
@@ -43,7 +42,7 @@ export const CadastrarCliente = () => {
   const { form, submit, isPending } = useFormCadastrarCliente();
 
   return (
-    <section className="flex justify-center pt-10 ">
+    <section className="flex justify-center pt-10">
       <Card className="w-10/12 dark:bg-bg bg-background">
         <CardHeader>
           <CardTitle>Cadastrar Cliente</CardTitle>
@@ -59,7 +58,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Nome *</Label>
+                      <FormLabel>Nome *</FormLabel>
                       <FormControl>
                         <Input placeholder="Nome do cliente" {...field} />
                       </FormControl>
@@ -73,7 +72,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Email</Label>
+                      <FormLabel>Email</FormLabel>
                       <FormControl>
                         <Input placeholder="Email do cliente" {...field} />
                       </FormControl>
@@ -175,7 +174,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Telefone 1</Label>
+                      <FormLabel>Telefone 1</FormLabel>
                       <FormControl>
                         <Input placeholder="Telefone 1" {...field} />
                       </FormControl>
@@ -188,7 +187,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Telefone 2</Label>
+                      <FormLabel>Telefone 2</FormLabel>
                       <FormControl>
                         <Input placeholder="Telefone 2" {...field} />
                       </FormControl>
@@ -201,7 +200,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Telefone 3</Label>
+                      <FormLabel>Telefone 3</FormLabel>
                       <FormControl>
                         <Input placeholder="Telefone 3" {...field} />
                       </FormControl>
@@ -216,7 +215,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Documento</Label>
+                      <FormLabel>Documento</FormLabel>
                       <FormControl>
                         <Input placeholder="Documento" {...field} />
                       </FormControl>
@@ -229,7 +228,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Origem</Label>
+                      <FormLabel>Origem</FormLabel>
                       <FormControl>
                         <Input placeholder="Origem" {...field} />
                       </FormControl>
@@ -242,7 +241,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Contato</Label>
+                      <FormLabel>Contato</FormLabel>
                       <FormControl>
                         <Input placeholder="Contato" {...field} />
                       </FormControl>
@@ -323,7 +322,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Competitor</Label>
+                      <FormLabel>Competitor</FormLabel>
                       <FormControl>
                         <Input placeholder="Competitor" {...field} />
                       </FormControl>
@@ -336,7 +335,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Observações</Label>
+                      <FormLabel>Observações</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Observações" {...field} />
                       </FormControl>
@@ -352,7 +351,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Cep</Label>
+                      <FormLabel>Cep</FormLabel>
                       <FormControl>
                         <Input placeholder="00000-000" {...field} />
                       </FormControl>
@@ -400,7 +399,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Localidade</Label>
+                      <FormLabel>Localidade</FormLabel>
                       <FormControl>
                         <Input placeholder="Localidade" {...field} />
                       </FormControl>
@@ -413,7 +412,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Logradouro</Label>
+                      <FormLabel>Logradouro</FormLabel>
                       <FormControl>
                         <Input placeholder="Logradouro" {...field} />
                       </FormControl>
@@ -428,7 +427,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem>
-                      <Label>Número</Label>
+                      <FormLabel>Número</FormLabel>
                       <FormControl>
                         <Input placeholder="Número" {...field} />
                       </FormControl>
@@ -441,7 +440,7 @@ export const CadastrarCliente = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="col-start-3 col-span-2">
-                      <Label>Complemento</Label>
+                      <FormLabel>Complemento</FormLabel>
                       <FormControl>
                         <Textarea placeholder="Complemento" {...field} />
                       </FormControl>

@@ -103,14 +103,14 @@ export class CustomerService {
         }
 
         if (createCustomerDto.address) {
-          const adress = await transaction.address.create({
+          const address = await transaction.address.create({
             data: createCustomerDto.address,
           });
 
-          await transaction.customerAdress.create({
+          await transaction.customerAddress.create({
             data: {
               customerId: customer.id,
-              addressId: adress.id,
+              addressId: address.id,
             },
           });
         }
@@ -129,7 +129,11 @@ export class CustomerService {
       where: {
         companyId,
       },
-      include: { customer: true },
+      include: {
+        customer: {
+          include: { customerAddress: { include: { address: true } } },
+        },
+      },
     });
   }
 
@@ -139,7 +143,24 @@ export class CustomerService {
         customerId,
         companyId,
       },
-      include: { customer: true },
+      include: {
+        customer: {
+          include: { customerAddress: { include: { address: true } } },
+        },
+      },
+    });
+  }
+
+  async findAllByUserId(userId: number) {
+    return await this.prisma.customerUser.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        customer: {
+          include: { customerAddress: { include: { address: true } } },
+        },
+      },
     });
   }
 
