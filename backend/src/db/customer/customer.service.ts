@@ -14,17 +14,21 @@ export class CustomerService {
   constructor(private prisma: PrismaService) {}
 
   async create(createCustomerDto: CreateCustomerDto) {
-    const existe = await this.prisma.customerCompany.findFirst({
-      where: {
-        companyId: createCustomerDto.companyId,
-        customer: {
-          document: createCustomerDto.document,
+    if (createCustomerDto.document) {
+      const existe = await this.prisma.customerCompany.findFirst({
+        where: {
+          companyId: createCustomerDto.companyId,
+          customer: {
+            document: createCustomerDto.document,
+          },
         },
-      },
-      include: { customer: true },
-    });
-    if (existe) {
-      throw new ForbiddenException('This customer already exists');
+
+        include: { customer: true },
+      });
+
+      if (existe) {
+        throw new ForbiddenException('This customer already exists');
+      }
     }
 
     const [user, company] = await Promise.all([
@@ -98,9 +102,9 @@ export class CustomerService {
           });
         }
 
-        if (createCustomerDto.adress) {
+        if (createCustomerDto.address) {
           const adress = await transaction.address.create({
-            data: createCustomerDto.adress,
+            data: createCustomerDto.address,
           });
 
           await transaction.customerAdress.create({

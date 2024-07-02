@@ -167,5 +167,5 @@ export class CreateCustomerDto {
     required: true,
   })
   @Type(() => CreateAddressDto)
-  adress: CreateAddressDto;
+  address: CreateAddressDto;
 }

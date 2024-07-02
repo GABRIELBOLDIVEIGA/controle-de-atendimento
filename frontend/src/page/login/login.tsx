@@ -25,7 +25,7 @@ export const Login = () => {
   const { form, onSubmit, isPending } = useFormLogin();
 
   return (
-    <section className="w-full h-screen grid place-content-center bg-bg dark:bg-darkBg ">
+    <section className="w-full h-screen grid place-content-center bg-bg dark:bg-darkBg">
       <div>
         <Card className="w-[350px]">
           <CardHeader>

@@ -5,7 +5,7 @@ import { SideMenu } from "./components/side-menu";
 
 export const Layout = () => {
   return (
-    <section className="w-screen h-screen overflow-x-auto">
+    <section className="w-screen h-screen overflow-x-hidden">
       <Header />
 
       <SideMenu />
