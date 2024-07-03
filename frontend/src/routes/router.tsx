@@ -1,5 +1,7 @@
 import { Layout } from "@/layout";
+import { NotFound } from "@/page/404/not-found";
 import { CadastrarCliente } from "@/page/clientes/cadastrar-cliente/cadastrar-cliente";
+import { DetalhesCliente } from "@/page/clientes/detalhes-cliente/detalhes-cliente";
 import { EditarCliente } from "@/page/clientes/editar-cliente/editar-cliente";
 import { MeusClientes } from "@/page/clientes/meus-clientes/meus-clientes";
 import { TodosClientes } from "@/page/clientes/todos-clientes/todos-clientes";
@@ -49,6 +51,10 @@ export const AppRoutes = () => {
                 element={<MeusClientes />}
               />
               <Route
+                path="/clientes/detalhes-clientes/:id"
+                element={<DetalhesCliente />}
+              />
+              <Route
                 path="/clientes/editar-clientes/:id"
                 element={<EditarCliente />}
               />
@@ -68,7 +74,7 @@ export const AppRoutes = () => {
               />
             </Route>
           </Route>
-          <Route path="/*" element={<>Not Found</>} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

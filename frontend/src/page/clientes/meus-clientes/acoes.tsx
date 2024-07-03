@@ -24,7 +24,7 @@ import { useDeleteCliente } from "@/hooks/useMutations/clientes/useDeleteCliente
 import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
 import { useToast } from "@/components/ui/use-toast";
 import { errorHandler } from "@/helpers/error-handler";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { queryClient } from "@/lib/tanstack-react-query";
 
 interface AcoesProps {
@@ -81,7 +81,12 @@ export const Acoes = ({ customerId }: AcoesProps) => {
             Editar
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Ver detalhes</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link to={`/clientes/detalhes-clientes/${customerId}`}>
+              Ver detalhes
+            </Link>
+          </DropdownMenuItem>
+
           <DropdownMenuItem>Iniciar atendimento</DropdownMenuItem>
           {user?.role === Role.ADMIN && (
             <>
