@@ -85,22 +85,19 @@ export class CustomerService {
           },
         });
 
-        if (
-          createCustomerDto.schedule.next_return &&
-          createCustomerDto.schedule.time_preference
-        ) {
-          await transaction.schedule.create({
-            data: {
-              time_preference: timeToDate(
-                createCustomerDto.schedule.time_preference,
-              ),
-              next_return: new Date(createCustomerDto.schedule.next_return),
-              customerId: customer.id,
-              companyId: createCustomerDto.companyId,
-              userId: createCustomerDto.userId,
-            },
-          });
-        }
+        await transaction.schedule.create({
+          data: {
+            time_preference: createCustomerDto.schedule.time_preference
+              ? timeToDate(createCustomerDto.schedule.time_preference)
+              : null,
+            next_return: createCustomerDto.schedule.next_return
+              ? new Date(createCustomerDto.schedule.next_return)
+              : null,
+            customerId: customer.id,
+            companyId: createCustomerDto.companyId,
+            userId: createCustomerDto.userId,
+          },
+        });
 
         if (createCustomerDto.address) {
           const address = await transaction.address.create({
@@ -138,7 +135,7 @@ export class CustomerService {
   }
 
   async findOne(customerId: number, companyId: number) {
-    return await this.prisma.customerCompany.findMany({
+    return await this.prisma.customerCompany.findFirst({
       where: {
         customerId,
         companyId,

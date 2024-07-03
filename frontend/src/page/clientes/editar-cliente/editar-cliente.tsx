@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useFormCadastrarCliente } from "./useForm";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,15 +36,16 @@ import {
 } from "@/components/ui/select";
 import estados_brasil from "@/assets/estados_brasil.json";
 import { Loader2 } from "lucide-react";
+import { useFormEditarCliente } from "./useForm";
 
-export const CadastrarCliente = () => {
-  const { form, submit, isPending } = useFormCadastrarCliente();
+export const EditarCliente = () => {
+  const { form, submit, isPending, reset } = useFormEditarCliente();
 
   return (
     <section className="flex justify-center pt-10">
       <Card className="w-10/12 dark:bg-bg bg-background">
         <CardHeader>
-          <CardTitle>Cadastrar Cliente</CardTitle>
+          <CardTitle>Editar Cliente</CardTitle>
           <CardDescription>Preencha os dados do cliente</CardDescription>
         </CardHeader>
 
@@ -113,7 +113,6 @@ export const CadastrarCliente = () => {
                             mode="single"
                             selected={new Date(`${field.value}`)}
                             onSelect={field.onChange}
-                            disabled={(date) => date < subDays(new Date(), 1)}
                             initialFocus
                             locale={ptBR}
                           />
@@ -156,7 +155,6 @@ export const CadastrarCliente = () => {
                             mode="single"
                             selected={new Date(`${field.value}`)}
                             onSelect={field.onChange}
-                            disabled={(date) => date < subDays(new Date(), 1)}
                             initialFocus
                             locale={ptBR}
                           />
@@ -367,7 +365,8 @@ export const CadastrarCliente = () => {
                       <FormLabel>UF</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={`${field.value}`}
+                        // defaultValue={field.value}
+                        value={field.value}
                       >
                         <FormControl>
                           <SelectTrigger className="bg-background dark:bg-foreground dark:text-text">
@@ -380,10 +379,7 @@ export const CadastrarCliente = () => {
                         </FormControl>
                         <SelectContent className="bg-background dark:bg-foreground">
                           {estados_brasil?.map((estado) => (
-                            <SelectItem
-                              key={estado.nome}
-                              value={`${estado.nome}`}
-                            >
+                            <SelectItem key={estado.nome} value={estado.nome}>
                               {estado.nome}
                             </SelectItem>
                           ))}
@@ -464,15 +460,11 @@ export const CadastrarCliente = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-between">
-              <Button
-                type="reset"
-                onClick={() => form.reset()}
-                variant="neutral"
-              >
+              <Button type="reset" onClick={() => reset()} variant="neutral">
                 Limpar
               </Button>
               <Button disabled={isPending} type="submit" className="w-[96px]">
-                {isPending ? <Loader2 className="animate-spin" /> : "Cadastrar"}
+                {isPending ? <Loader2 className="animate-spin" /> : "Salvar"}
               </Button>
             </CardFooter>
           </form>

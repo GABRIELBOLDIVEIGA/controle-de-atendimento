@@ -1,5 +1,7 @@
 import { Layout } from "@/layout";
 import { CadastrarCliente } from "@/page/clientes/cadastrar-cliente/cadastrar-cliente";
+import { EditarCliente } from "@/page/clientes/editar-cliente/editar-cliente";
+import { MeusClientes } from "@/page/clientes/meus-clientes/meus-clientes";
 import { TodosClientes } from "@/page/clientes/todos-clientes/todos-clientes";
 import { CriarConta } from "@/page/criar-conta/criar-conta";
 import { Login } from "@/page/login/login";
@@ -44,7 +46,11 @@ export const AppRoutes = () => {
               />
               <Route
                 path="/clientes/meus-clientes"
-                element={<>/clientes/clientes</>}
+                element={<MeusClientes />}
+              />
+              <Route
+                path="/clientes/editar-clientes/:id"
+                element={<EditarCliente />}
               />
               <Route
                 path="/clientes/cadastrar-cliente"

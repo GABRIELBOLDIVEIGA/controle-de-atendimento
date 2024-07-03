@@ -60,6 +60,21 @@ export class AddressService {
     }
   }
 
+  async getCustomerAddresses(customerId: number) {
+    const customerAddress = await this.prisma.customerAddress.findFirst({
+      where: {
+        customerId,
+      },
+      include: { address: true },
+    });
+
+    if (!customerAddress) {
+      throw new NotFoundException('Customer address not found');
+    }
+
+    return customerAddress;
+  }
+
   async update(
     addressId: number,
     updateAddressDto: UpdateAddressDto,
@@ -81,7 +96,15 @@ export class AddressService {
         where: {
           id: addressId,
         },
-        data: updateAddressDto,
+        data: {
+          cep: updateAddressDto.cep,
+          logradouro: updateAddressDto.logradouro,
+          complemento: updateAddressDto.complemento,
+          bairro: updateAddressDto.bairro,
+          localidade: updateAddressDto.localidade,
+          uf: updateAddressDto.uf,
+          numero: updateAddressDto.numero,
+        },
       });
     } catch (error) {
       throw new InternalServerErrorException(error);

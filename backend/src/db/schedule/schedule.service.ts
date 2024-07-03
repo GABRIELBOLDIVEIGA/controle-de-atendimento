@@ -87,13 +87,19 @@ export class ScheduleService {
   }
 
   async findOneByCustomerId(customerId: number, companyId: number) {
-    return await this.prisma.schedule.findFirst({
+    const schedule = await this.prisma.schedule.findFirst({
       where: {
         customerId,
         companyId,
       },
       include: { customer: true, user: { select: { id: true, name: true } } },
     });
+
+    if (!schedule) {
+      throw new NotFoundException('Schedule not found');
+    }
+
+    return schedule;
   }
 
   async update(

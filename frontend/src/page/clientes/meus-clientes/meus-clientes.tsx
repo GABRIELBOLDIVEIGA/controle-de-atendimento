@@ -1,8 +1,8 @@
 import { DataTable } from "@/components/ui/data-table";
-import { columns } from "./columns";
 import { useCustomerDataTable } from "./useCustomerDataTable";
+import { columns } from "./columns";
 
-export const TodosClientes = () => {
+export const MeusClientes = () => {
   const dataTable = useCustomerDataTable();
 
   return (

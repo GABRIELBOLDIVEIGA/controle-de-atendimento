@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   Req,
   Post,
+  Get,
 } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { UpdateAddressDto } from './dto/update-address.dto';
@@ -34,18 +35,20 @@ export class AddressController {
     );
   }
 
-  @Patch(':addressId')
+  @Get('customer-address/:customerId')
+  @UseGuards(AuthGuard)
+  getCustomerAddresses(@Param('customerId', ParseIntPipe) customerId: number) {
+    return this.addressService.getCustomerAddresses(customerId);
+  }
+
+  @Patch(':addressId/:customerId')
   @UseGuards(AuthGuard)
   update(
     @Param('addressId', ParseIntPipe) addressId: number,
+    @Param('customerId', ParseIntPipe) customerId: number,
     @Body() updateAddressDto: UpdateAddressDto,
-    @Req() req,
   ) {
-    return this.addressService.update(
-      addressId,
-      updateAddressDto,
-      req.user.companyId,
-    );
+    return this.addressService.update(addressId, updateAddressDto, customerId);
   }
 
   @Delete(':addressId')

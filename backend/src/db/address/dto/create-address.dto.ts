@@ -58,7 +58,7 @@ export class CreateAddressDto {
     required: false,
   })
   @IsOptional()
-  @MaxLength(2)
+  @MaxLength(50)
   @IsString()
   uf: string;
 

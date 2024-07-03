@@ -3,21 +3,21 @@ import { useAuthStore } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
 import { Customer, customerSchema } from "./clientes.schema";
 
-export const TODOS_CLIENTES_QUERY_KEY = "todosClientes";
+export const MEUS_CLIENTE_QUERY_KEY = "meus-cliente";
 
-export const useTodosClientes = () => {
+export const useMeusClientes = () => {
   const { api } = useApi();
   const user = useAuthStore((store) => store.user);
 
-  const todosClientes = useQuery({
+  const meusCliente = useQuery({
     enabled: !!user,
-    queryKey: [TODOS_CLIENTES_QUERY_KEY],
+    queryKey: [MEUS_CLIENTE_QUERY_KEY],
     queryFn: async () => {
       const { data } = await api.get<Customer[]>(
-        `/customer/company/${user?.userId}`
+        `/customer/customers-by-user/${user?.userId}`
       );
 
-      const filter = data.filter((item) => {
+      const filtro = data.filter((item) => {
         if (customerSchema.safeParse(item).success) {
           return true;
         } else {
@@ -27,9 +27,9 @@ export const useTodosClientes = () => {
         }
       });
 
-      return filter;
+      return filtro;
     },
   });
 
-  return { ...todosClientes, todosClientes };
+  return { ...meusCliente };
 };
