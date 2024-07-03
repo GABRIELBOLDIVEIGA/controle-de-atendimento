@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import { Input } from "./input";
+// import { Input } from "./input";
 import { Button } from "./button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -59,7 +59,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="py-2">
+      {/* <div className="py-2">
         <Input
           placeholder="Nome..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -68,7 +68,7 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-      </div>
+      </div> */}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

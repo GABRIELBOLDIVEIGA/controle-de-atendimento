@@ -1,5 +1,6 @@
 import { Layout } from "@/layout";
 import { NotFound } from "@/page/404/not-found";
+import { TodasAgendas } from "@/page/agenda/todas-agendas/todas-agendas";
 import { CadastrarCliente } from "@/page/clientes/cadastrar-cliente/cadastrar-cliente";
 import { DetalhesCliente } from "@/page/clientes/detalhes-cliente/detalhes-cliente";
 import { EditarCliente } from "@/page/clientes/editar-cliente/editar-cliente";
@@ -36,11 +37,9 @@ export const AppRoutes = () => {
             <Route index element={<>agenda</>} />
             <Route path="/agenda">
               <Route path="/agenda/minha-agenda" element={<>agenda</>} />
-              <Route
-                path="/agenda/todas-agendas"
-                element={<>/agenda/todas-agendas</>}
-              />
+              <Route path="/agenda/todas-agendas" element={<TodasAgendas />} />
             </Route>
+
             <Route path="/clientes">
               <Route
                 path="/clientes/todos-clientes"
@@ -63,6 +62,7 @@ export const AppRoutes = () => {
                 element={<CadastrarCliente />}
               />
             </Route>
+
             <Route path="/usuarios">
               <Route
                 path="/usuarios/todos-usuarios"
