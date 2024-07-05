@@ -112,14 +112,28 @@ export class UserService {
     }
   }
 
-  async findAll() {
-    return await this.prismaService.client.user.findMany();
+  async findAll(companyId: number) {
+    return await this.prismaService.client.user.findMany({
+      where: {
+        userCompany: {
+          some: {
+            companyId,
+          },
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
   }
 
-  async findOne(id: number) {
+  async findOne(userId: number) {
     return await this.prismaService.client.user.findUnique({
       where: {
-        id: id,
+        id: userId,
       },
     });
   }

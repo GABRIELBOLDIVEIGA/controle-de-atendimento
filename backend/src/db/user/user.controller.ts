@@ -55,22 +55,29 @@ export class UserController {
     return this.userService.createAdm(createAdmUserDto);
   }
 
-  @Get()
+  @Get('/:companyId')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
-  findAll(@Req() req) {
-    if (req.user.companyId) {
-      return this.userService.findAll();
+  findAll(@Param('companyId', ParseIntPipe) companyId: number, @Req() req) {
+    if (req.user.companyId === companyId) {
+      return this.userService.findAll(companyId);
     }
 
     throw new ForbiddenException('User does not have access to this resource');
   }
 
-  @Get(':userId')
+  @Get('/:companyId/:userId')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
-  findOne(@Param('userId', ParseIntPipe) userId: number) {
-    return this.userService.findOne(userId);
+  findOne(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Req() req,
+  ) {
+    if (req.user.companyId === companyId) {
+      return this.userService.findOne(userId);
+    }
+    throw new ForbiddenException('User does not have access to this resource');
   }
 
   @Patch(':userId')
@@ -78,15 +85,27 @@ export class UserController {
   @UseGuards(AuthGuard)
   update(
     @Param('userId', ParseIntPipe) userId: number,
+    @Param('companyId', ParseIntPipe) companyId: number,
     @Body() updateUserDto: UpdateUserDto,
+    @Req() req,
   ) {
-    return this.userService.update(userId, updateUserDto);
+    if (req.user.companyId === companyId) {
+      return this.userService.update(userId, updateUserDto);
+    }
+    throw new ForbiddenException('User does not have access to this resource');
   }
 
-  @Delete(':userId')
+  @Delete(':userId/:companyId')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
-  remove(@Param('userId', ParseIntPipe) userId: number) {
-    return this.userService.remove(userId);
+  remove(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('companyId', ParseIntPipe) companyId: number,
+    @Req() req,
+  ) {
+    if (req.user.companyId === companyId) {
+      return this.userService.remove(userId);
+    }
+    throw new ForbiddenException('User does not have access to this resource');
   }
 }

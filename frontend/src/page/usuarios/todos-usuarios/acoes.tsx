@@ -20,20 +20,20 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useDeleteCliente } from "@/hooks/useMutations/clientes/useDeleteCliente";
-import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
 import { useToast } from "@/components/ui/use-toast";
 import { errorHandler } from "@/helpers/error-handler";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { queryClient } from "@/lib/tanstack-react-query";
+import { useDeleteUsuario } from "@/hooks/useMutations/usuario/useDeleteUsuario";
+import { TODOS_USUARIOS_QUERY_KEY } from "@/hooks/useQueries/usuarios/useUsuarios";
 
 interface AcoesProps {
-  customerId: number;
+  userId: number;
 }
 
-export const Acoes = ({ customerId }: AcoesProps) => {
+export const Acoes = ({ userId }: AcoesProps) => {
   const user = useAuthStore((store) => store.user);
-  const { mutate, isPending } = useDeleteCliente();
+  const { mutate, isPending } = useDeleteUsuario();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -42,14 +42,14 @@ export const Acoes = ({ customerId }: AcoesProps) => {
 
     mutate(
       {
-        customerId: customerId,
-        companyId: user?.userId,
+        userId: userId,
+        companyId: user?.companyId,
       },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
             predicate: (query) =>
-              query.queryKey[0] === TODOS_CLIENTES_QUERY_KEY,
+              query.queryKey[0] === TODOS_USUARIOS_QUERY_KEY,
           });
         },
         onError: (error) => {
@@ -74,35 +74,28 @@ export const Acoes = ({ customerId }: AcoesProps) => {
           <DropdownMenuLabel>Opções</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => {
-              navigate("/clientes/editar-clientes/" + customerId);
+              navigate("/usuarios/editar-usuario/" + userId);
             }}
           >
             Editar
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link to={`/clientes/detalhes-clientes/${customerId}`}>
-              Ver detalhes
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem>Iniciar atendimento</DropdownMenuItem>
+
           {user?.role === Role.ADMIN && (
             <>
               <DropdownMenuSeparator />
-
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <div className="cursor-pointer">
+                  <div className="cursor-pointer hover:text-rose-900">
                     <DropdownMenuLabel>Excluir</DropdownMenuLabel>
                   </div>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>
-                      Excluir este cliente de forma permanente?
+                      Excluir este usuário de forma permanente?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                      Ao excluir este cliente, todos os dados relacionados serão
+                      Ao excluir este usuário, todos os dados relacionados serão
                       excluídos permanentemente. Esta ação não pode ser
                       desfeita.
                     </AlertDialogDescription>
