@@ -9,6 +9,7 @@ import { TodosClientes } from "@/page/clientes/todos-clientes/todos-clientes";
 import { CriarConta } from "@/page/criar-conta/criar-conta";
 import { Login } from "@/page/login/login";
 import { CadastrarUsuario } from "@/page/usuarios/cadastrar-usuario/cadastrar-usuario";
+import { EditarUsuario } from "@/page/usuarios/editar-usuario/editar-usuario";
 import { TodosUsuarios } from "@/page/usuarios/todos-usuarios/todos-usuarios";
 import { useAuthStore } from "@/store/auth.store";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -75,7 +76,7 @@ export const AppRoutes = () => {
               />
               <Route
                 path="/usuarios/editar-usuario/:userId"
-                element={<>Editar</>}
+                element={<EditarUsuario />}
               />
             </Route>
           </Route>

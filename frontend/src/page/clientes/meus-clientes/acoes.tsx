@@ -47,7 +47,6 @@ export const Acoes = ({ customerId }: AcoesProps) => {
       },
       {
         onSuccess: () => {
-          console.log("[onSuccess]");
           queryClient.invalidateQueries({
             predicate: (query) =>
               query.queryKey[0] === TODOS_CLIENTES_QUERY_KEY,

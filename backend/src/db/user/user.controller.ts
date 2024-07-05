@@ -80,7 +80,7 @@ export class UserController {
     throw new ForbiddenException('User does not have access to this resource');
   }
 
-  @Patch(':userId')
+  @Patch(':userId/:companyId')
   @ApiBearerAuth('JWT-auth')
   @UseGuards(AuthGuard)
   update(

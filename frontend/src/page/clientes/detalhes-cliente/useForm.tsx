@@ -95,10 +95,6 @@ export const useFormDetalhesCliente = () => {
   }, [params, setCustomerId, setCustomerIdEndereco, setCustomerIdAgenda]);
 
   const setDataForm = () => {
-    console.log("[cliente] => ", cliente);
-    console.log("[endereco] => ", endereco);
-    console.log("[agenda] => ", agenda);
-
     if (cliente && user) {
       form.setValue("customerId", cliente.customer.id);
       form.setValue("userId", user.userId);

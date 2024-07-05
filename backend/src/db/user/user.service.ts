@@ -135,6 +135,12 @@ export class UserService {
       where: {
         id: userId,
       },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
     });
   }
 

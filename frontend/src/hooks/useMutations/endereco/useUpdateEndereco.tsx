@@ -23,7 +23,6 @@ export const useUpdateEndereco = () => {
   const updateEndereco = useMutation({
     mutationKey: ["updateEndereco"],
     mutationFn: async (form: UpdateEndereco) => {
-      console.log("[form] => ", form);
       const { data } = await api.patch(
         `/address/${form.id}/${form.customerId}`,
         { ...form }

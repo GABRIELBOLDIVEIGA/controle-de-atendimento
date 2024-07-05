@@ -23,8 +23,18 @@ export const useUsuarios = () => {
     queryKey: [TODOS_USUARIOS_QUERY_KEY, user?.companyId],
     queryFn: async () => {
       const { data } = await api.get<User[]>(`/user/${user?.companyId}`);
-      console.log("data", data);
-      return data;
+
+      const filter = data.filter((item) => {
+        if (usuarioSchema.safeParse(item).success) {
+          return true;
+        } else {
+          console.warn("[Data] => ", item);
+          console.warn("[Error] => ", usuarioSchema.safeParse(item));
+          return false;
+        }
+      });
+
+      return filter;
     },
   });
   return { ...todosClientes };
