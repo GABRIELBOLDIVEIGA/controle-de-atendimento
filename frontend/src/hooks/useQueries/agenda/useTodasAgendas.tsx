@@ -37,7 +37,7 @@ const schema = z.object({
   }),
 });
 
-type Schedule = z.infer<typeof schema>;
+export type Schedule = z.infer<typeof schema>;
 
 export const TODOS_AGENDAS_QUERY = "todo-agendas-query";
 

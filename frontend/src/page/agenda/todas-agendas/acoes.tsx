@@ -24,19 +24,18 @@ import { useDeleteCliente } from "@/hooks/useMutations/clientes/useDeleteCliente
 import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
 import { useToast } from "@/components/ui/use-toast";
 import { errorHandler } from "@/helpers/error-handler";
-import { Link, useNavigate } from "react-router-dom";
 import { queryClient } from "@/lib/tanstack-react-query";
 import { MEUS_CLIENTE_QUERY_KEY } from "@/hooks/useQueries/clientes/useMeusCliente";
+import { SheetSchedule } from "../sheet-agenda";
 
 interface AcoesProps {
-  agendaId: number;
+  customerId: number;
 }
 
-export const Acoes = ({ agendaId: customerId }: AcoesProps) => {
+export const Acoes = ({ customerId }: AcoesProps) => {
   const user = useAuthStore((store) => store.user);
   const { mutate, isPending } = useDeleteCliente();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const handleDelete = () => {
     if (!user) return;
@@ -76,19 +75,14 @@ export const Acoes = ({ agendaId: customerId }: AcoesProps) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Opções</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={() => {
-              navigate("/agenda/editar-agenda/" + customerId);
-            }}
-          >
-            Editar
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <Link to={`/agenda/detalhes-agenda/${customerId}`}>
+
+          <SheetSchedule customerId={customerId}>
+            <DropdownMenuLabel className="cursor-pointer">
               Ver detalhes
-            </Link>
-          </DropdownMenuItem>
+            </DropdownMenuLabel>
+          </SheetSchedule>
+          <DropdownMenuSeparator />
+
           <DropdownMenuItem>Iniciar atendimento</DropdownMenuItem>
           {user?.role === Role.ADMIN && (
             <>
@@ -96,7 +90,7 @@ export const Acoes = ({ agendaId: customerId }: AcoesProps) => {
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <div className="cursor-pointer">
+                  <div className="cursor-pointer hover:text-rose-900">
                     <DropdownMenuLabel>Excluir</DropdownMenuLabel>
                   </div>
                 </AlertDialogTrigger>

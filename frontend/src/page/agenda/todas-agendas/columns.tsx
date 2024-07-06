@@ -117,7 +117,7 @@ export const columns: ColumnDef<AgendaDataTable>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      return <Acoes agendaId={row.original.id} />;
+      return <Acoes customerId={row.original.customer_id} />;
     },
   },
 ];

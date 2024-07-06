@@ -6,8 +6,8 @@ import { z } from "zod";
 
 const agendaSchema = z.object({
   id: z.coerce.number().int().positive(),
-  time_preference: z.string().datetime(),
-  next_return: z.string().datetime(),
+  time_preference: z.string().datetime().nullable(),
+  next_return: z.string().datetime().nullable(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
   companyId: z.coerce.number().int().positive(),
@@ -16,7 +16,7 @@ const agendaSchema = z.object({
   customer: z.object({
     id: z.coerce.number().int().positive(),
     name: z.string(),
-    email: z.string().email(),
+    email: z.string().email().nullable(),
     phone1: z.string().nullable(),
     phone2: z.string().nullable(),
     phone3: z.string().nullable(),
@@ -48,7 +48,7 @@ export const useAgendaByClienteId = () => {
 
   const queryAgendaByClienteId = useQuery({
     enabled: !!customerId,
-    queryKey: [AGENDA_BY_CLIENTE_ID_QUERY_KEY],
+    queryKey: [AGENDA_BY_CLIENTE_ID_QUERY_KEY, customerId],
     queryFn: async () => {
       const { data } = await api.get<AgendaByClienteId>(
         `/schedule/customer/${customerId}`

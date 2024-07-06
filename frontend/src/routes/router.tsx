@@ -1,5 +1,6 @@
 import { Layout } from "@/layout";
 import { NotFound } from "@/page/404/not-found";
+import { MinhaAgenda } from "@/page/agenda/minha-agenda/minha-agenda";
 import { TodasAgendas } from "@/page/agenda/todas-agendas/todas-agendas";
 import { CadastrarCliente } from "@/page/clientes/cadastrar-cliente/cadastrar-cliente";
 import { DetalhesCliente } from "@/page/clientes/detalhes-cliente/detalhes-cliente";
@@ -36,17 +37,14 @@ export const AppRoutes = () => {
             element={<>RecoverPassword</>}
           />
           <Route path="/" element={user ? <Layout /> : <Login />}>
-            <Route index element={<>agenda</>} />
+            <Route index element={<MinhaAgenda />} />
+
             <Route path="/agenda">
-              <Route path="/agenda/minha-agenda" element={<>agenda</>} />
+              <Route path="/agenda/minha-agenda" element={<MinhaAgenda />} />
               <Route path="/agenda/todas-agendas" element={<TodasAgendas />} />
               <Route
                 path="/agenda/detalhes-agenda/:id"
                 element={<>DetalhesAgenda</>}
-              />
-              <Route
-                path="/agenda/editar-agenda/:id"
-                element={<>Editar Agenda</>}
               />
             </Route>
 

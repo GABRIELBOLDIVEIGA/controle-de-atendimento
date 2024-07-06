@@ -3,7 +3,10 @@ import { errorHandler } from "@/helpers/error-handler";
 import { useApi } from "@/hooks/useApi";
 import { useUpdateAgenda } from "@/hooks/useMutations/agenda/useUpdateAgenda";
 import { useUpdateEndereco } from "@/hooks/useMutations/endereco/useUpdateEndereco";
-import { useAgendaByClienteId } from "@/hooks/useQueries/agenda/useAgendaByClienteId";
+import {
+  AGENDA_BY_CLIENTE_ID_QUERY_KEY,
+  useAgendaByClienteId,
+} from "@/hooks/useQueries/agenda/useAgendaByClienteId";
 import { useCliente } from "@/hooks/useQueries/clientes/useCliente";
 import { MEUS_CLIENTE_QUERY_KEY } from "@/hooks/useQueries/clientes/useMeusCliente";
 import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
@@ -156,9 +159,15 @@ export const useFormEditarCliente = () => {
     if (agenda) {
       form.setValue(
         "schedule.time_preference",
-        addHours(new Date(agenda.time_preference), 3).toLocaleTimeString()
+        addHours(
+          new Date(agenda.time_preference ?? new Date()),
+          3
+        ).toLocaleTimeString()
       );
-      form.setValue("schedule.next_return", new Date(agenda.next_return));
+      form.setValue(
+        "schedule.next_return",
+        new Date(agenda.next_return ?? new Date())
+      );
     }
   };
 
@@ -173,9 +182,10 @@ export const useFormEditarCliente = () => {
       onSuccess: () => {
         toast({ title: "Cliente editado com sucesso!" });
         queryClient.invalidateQueries({
-          predicate: (query) =>
-            query.queryKey[0] === TODOS_CLIENTES_QUERY_KEY ||
-            query.queryKey[0] === MEUS_CLIENTE_QUERY_KEY,
+          predicate: ({ queryKey }) =>
+            queryKey[0] === TODOS_CLIENTES_QUERY_KEY ||
+            queryKey[0] === MEUS_CLIENTE_QUERY_KEY ||
+            queryKey[0] === AGENDA_BY_CLIENTE_ID_QUERY_KEY,
         });
       },
       onError: (error) => {

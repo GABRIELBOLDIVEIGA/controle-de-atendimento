@@ -265,7 +265,6 @@ export const CadastrarCliente = () => {
                           <Input
                             type="time"
                             className="dark:bg-foreground "
-                            placeholder="Observações"
                             {...field}
                           />
                         </FormControl>
