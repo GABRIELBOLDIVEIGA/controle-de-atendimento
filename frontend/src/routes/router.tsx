@@ -40,6 +40,14 @@ export const AppRoutes = () => {
             <Route path="/agenda">
               <Route path="/agenda/minha-agenda" element={<>agenda</>} />
               <Route path="/agenda/todas-agendas" element={<TodasAgendas />} />
+              <Route
+                path="/agenda/detalhes-agenda/:id"
+                element={<>DetalhesAgenda</>}
+              />
+              <Route
+                path="/agenda/editar-agenda/:id"
+                element={<>Editar Agenda</>}
+              />
             </Route>
 
             <Route path="/clientes">

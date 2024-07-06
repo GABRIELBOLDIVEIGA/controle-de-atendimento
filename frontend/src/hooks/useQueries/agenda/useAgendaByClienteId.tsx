@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { useApi } from "@/hooks/useApi";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -43,6 +44,7 @@ export const AGENDA_BY_CLIENTE_ID_QUERY_KEY = "agendaByClienteId";
 export const useAgendaByClienteId = () => {
   const { api } = useApi();
   const [customerId, setCustomerId] = useState<number>();
+  const { toast } = useToast();
 
   const queryAgendaByClienteId = useQuery({
     enabled: !!customerId,
@@ -57,6 +59,10 @@ export const useAgendaByClienteId = () => {
       } else {
         console.warn("[Data] => ", data);
         console.warn("[Error] => ", agendaSchema.safeParse(data));
+        toast({
+          title: "Erro ao carregar dados",
+          description: `${agendaSchema.safeParse(data).error?.message}`,
+        });
         return null;
       }
     },

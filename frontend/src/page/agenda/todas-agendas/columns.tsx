@@ -2,7 +2,8 @@ import { Button } from "@/components/ui/button";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { addHours, format } from "date-fns";
-import { AgendaDataTable } from "./useAgendaDataTable";
+import { AgendaDataTable } from "@/hooks/useQueries/agenda/agenda.schema";
+import { Acoes } from "./acoes";
 
 export const columns: ColumnDef<AgendaDataTable>[] = [
   {
@@ -112,11 +113,11 @@ export const columns: ColumnDef<AgendaDataTable>[] = [
     },
   },
 
-  // {
-  //   id: "actions",
-  //   enableHiding: false,
-  //   cell: ({ row }) => {
-  //     return <Acoes customerId={row.original.id} />;
-  //   },
-  // },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      return <Acoes agendaId={row.original.id} />;
+    },
+  },
 ];

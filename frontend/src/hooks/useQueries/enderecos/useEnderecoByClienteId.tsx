@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { useApi } from "@/hooks/useApi";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -26,6 +27,7 @@ export const ENDERECO_BY_CLIENTE_ID_QUERY_KEY = "enderecoByClienteId";
 export const useEnderecoByClienteId = () => {
   const { api } = useApi();
   const [customerId, setCustomerId] = useState<number>();
+  const { toast } = useToast();
 
   const queryEnderecoByClienteId = useQuery({
     enabled: !!customerId,
@@ -40,6 +42,10 @@ export const useEnderecoByClienteId = () => {
       } else {
         console.warn("[Data] => ", data);
         console.warn("[Error] => ", enderecoSchema.safeParse(data));
+        toast({
+          title: "Erro ao carregar dados",
+          description: `${enderecoSchema.safeParse(data).error?.message}`,
+        });
         return null;
       }
     },

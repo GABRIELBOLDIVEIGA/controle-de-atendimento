@@ -1,3 +1,4 @@
+import { useToast } from "@/components/ui/use-toast";
 import { useApi } from "@/hooks/useApi";
 import { Role, useAuthStore } from "@/store/auth.store";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +18,7 @@ export const TODOS_USUARIOS_QUERY_KEY = "todosUsuarios";
 export const useUsuarios = () => {
   const { api } = useApi();
   const user = useAuthStore((store) => store.user);
+  const { toast } = useToast();
 
   const todosClientes = useQuery({
     enabled: !!user,
@@ -30,6 +32,10 @@ export const useUsuarios = () => {
         } else {
           console.warn("[Data] => ", item);
           console.warn("[Error] => ", usuarioSchema.safeParse(item));
+          toast({
+            title: "Erro ao carregar dados",
+            description: `${usuarioSchema.safeParse(item).error?.message}`,
+          });
           return false;
         }
       });

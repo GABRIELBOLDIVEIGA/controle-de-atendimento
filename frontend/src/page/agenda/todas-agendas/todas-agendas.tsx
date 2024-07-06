@@ -1,9 +1,9 @@
 import { DataTable } from "@/components/ui/data-table";
-import { useAgendaDataTable } from "./useAgendaDataTable";
 import { columns } from "./columns";
+import { useTodasAgendas } from "@/hooks/useQueries/agenda/useTodasAgendas";
 
 export const TodasAgendas = () => {
-  const { data } = useAgendaDataTable();
+  const { data } = useTodasAgendas();
 
   return (
     <section className="flex justify-center pt-10">
