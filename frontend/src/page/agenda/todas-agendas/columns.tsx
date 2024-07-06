@@ -4,6 +4,7 @@ import { ArrowUpDown } from "lucide-react";
 import { addHours, format } from "date-fns";
 import { AgendaDataTable } from "@/hooks/useQueries/agenda/agenda.schema";
 import { Acoes } from "./acoes";
+import { ptBR } from "date-fns/locale";
 
 export const columns: ColumnDef<AgendaDataTable>[] = [
   {
@@ -71,7 +72,7 @@ export const columns: ColumnDef<AgendaDataTable>[] = [
       return (
         <div className="lowercase">
           {row.original.last_contact
-            ? `${format(row.original.last_contact, "P")}`
+            ? `${format(row.original.last_contact, "P", { locale: ptBR })}`
             : ""}
         </div>
       );
@@ -87,7 +88,7 @@ export const columns: ColumnDef<AgendaDataTable>[] = [
       return (
         <div className="lowercase">
           {row.original.next_return
-            ? `${format(row.original.next_return, "P")}`
+            ? `${format(row.original.next_return, "P", { locale: ptBR })}`
             : ""}
         </div>
       );

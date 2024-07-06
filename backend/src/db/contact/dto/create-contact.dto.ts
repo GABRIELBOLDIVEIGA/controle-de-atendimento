@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsInt,
+  IsMilitaryTime,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateContactDto {
   @ApiProperty({
@@ -41,7 +47,7 @@ export class CreateContactDto {
     required: true,
   })
   @IsInt()
-  costumerId: number;
+  customerId: number;
 
   @ApiProperty({
     description: 'Usuario ID',
@@ -67,4 +73,20 @@ export class CreateContactDto {
   @IsOptional()
   @IsInt()
   otherOccurenceId?: number;
+
+  @ApiProperty({
+    description: 'Próximo retorno',
+    example: '2021-01-01T00:00:00.000Z',
+    required: true,
+  })
+  @IsDateString()
+  next_return: Date;
+
+  @ApiProperty({
+    description: 'Preferência de horário',
+    example: '00:00',
+    required: true,
+  })
+  @IsMilitaryTime()
+  time_preference: string;
 }

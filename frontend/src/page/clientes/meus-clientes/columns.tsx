@@ -3,7 +3,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { format } from "date-fns";
 import { Acoes } from "./acoes";
-import { CustomerTableData } from "./useCustomerDataTable";
+import { ptBR } from "date-fns/locale";
+import { CustomerTableData } from "@/hooks/useQueries/clientes/table.schema";
 
 export const columns: ColumnDef<CustomerTableData>[] = [
   {
@@ -85,7 +86,9 @@ export const columns: ColumnDef<CustomerTableData>[] = [
       return (
         <div className="lowercase">
           {row.original.first_contact
-            ? `${format(row.original.first_contact, "P")}`
+            ? `${format(row.original.first_contact, "P", {
+                locale: ptBR,
+              })}`
             : ""}
         </div>
       );
@@ -101,7 +104,9 @@ export const columns: ColumnDef<CustomerTableData>[] = [
       return (
         <div className="lowercase">
           {row.original.last_contact
-            ? `${format(row.original.last_contact, "P")}`
+            ? `${format(row.original.last_contact, "P", {
+                locale: ptBR,
+              })}`
             : ""}
         </div>
       );

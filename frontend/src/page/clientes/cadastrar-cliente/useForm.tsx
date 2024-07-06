@@ -2,6 +2,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { errorHandler } from "@/helpers/error-handler";
 import { useApi } from "@/hooks/useApi";
 import { AGENDA_BY_CLIENTE_ID_QUERY_KEY } from "@/hooks/useQueries/agenda/useAgendaByClienteId";
+import { TODOS_AGENDAS_QUERY } from "@/hooks/useQueries/agenda/useTodasAgendas";
 import { MEUS_CLIENTE_QUERY_KEY } from "@/hooks/useQueries/clientes/useMeusCliente";
 import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
 import { queryClient } from "@/lib/tanstack-react-query";
@@ -85,7 +86,8 @@ export const useFormCadastrarCliente = () => {
           predicate: ({ queryKey }) =>
             queryKey[0] === TODOS_CLIENTES_QUERY_KEY ||
             queryKey[0] === MEUS_CLIENTE_QUERY_KEY ||
-            queryKey[0] === AGENDA_BY_CLIENTE_ID_QUERY_KEY,
+            queryKey[0] === AGENDA_BY_CLIENTE_ID_QUERY_KEY ||
+            queryKey[0] === TODOS_AGENDAS_QUERY,
         });
       },
       onError: (error) => {

@@ -6,9 +6,9 @@ import { useToast } from "@/components/ui/use-toast";
 
 const CLIENTE_QUERY_KEY = "cliente";
 
-export const useCliente = () => {
+export const useCliente = (id?: number) => {
   const { api } = useApi();
-  const [customerId, setCustomerId] = useState<number>();
+  const [customerId, setCustomerId] = useState<number | undefined>(id);
   const { toast } = useToast();
 
   const cliente = useQuery({

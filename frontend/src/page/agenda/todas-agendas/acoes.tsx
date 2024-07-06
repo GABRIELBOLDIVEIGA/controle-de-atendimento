@@ -1,69 +1,70 @@
+import { SheetSchedule } from "@/components/sheet-agenda";
+import { SheetAtendimento } from "@/components/sheet-atendimento";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Loader2, MoreHorizontal } from "lucide-react";
-import { Role, useAuthStore } from "@/store/auth.store";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { useDeleteCliente } from "@/hooks/useMutations/clientes/useDeleteCliente";
-import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
-import { useToast } from "@/components/ui/use-toast";
-import { errorHandler } from "@/helpers/error-handler";
-import { queryClient } from "@/lib/tanstack-react-query";
-import { MEUS_CLIENTE_QUERY_KEY } from "@/hooks/useQueries/clientes/useMeusCliente";
-import { SheetSchedule } from "../sheet-agenda";
+import { MoreHorizontal } from "lucide-react";
+// import { useAuthStore } from "@/store/auth.store";
+// import {
+//   AlertDialog,
+//   AlertDialogAction,
+//   AlertDialogCancel,
+//   AlertDialogContent,
+//   AlertDialogDescription,
+//   AlertDialogFooter,
+//   AlertDialogHeader,
+//   AlertDialogTitle,
+//   AlertDialogTrigger,
+// } from "@/components/ui/alert-dialog";
+// import { useToast } from "@/components/ui/use-toast";
+// import { errorHandler } from "@/helpers/error-handler";
+// import { queryClient } from "@/lib/tanstack-react-query";
+// import { useDeleteAgenda } from "@/hooks/useMutations/agenda/useDeleteAgenda";
+// import { TODOS_AGENDAS_QUERY } from "@/hooks/useQueries/agenda/useTodasAgendas";
+// import { AGENDA_BY_CLIENTE_ID_QUERY_KEY } from "@/hooks/useQueries/agenda/useAgendaByClienteId";
 
 interface AcoesProps {
   customerId: number;
 }
 
 export const Acoes = ({ customerId }: AcoesProps) => {
-  const user = useAuthStore((store) => store.user);
-  const { mutate, isPending } = useDeleteCliente();
-  const { toast } = useToast();
+  // const user = useAuthStore((store) => store.user);
+  // const { mutate, isPending } = useDeleteAgenda();
+  // const { toast } = useToast();
 
-  const handleDelete = () => {
-    if (!user) return;
+  // const handleDelete = () => {
+  //   if (!user) return;
 
-    mutate(
-      {
-        customerId: customerId,
-        companyId: user?.userId,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            predicate: ({ queryKey }) =>
-              queryKey[0] === MEUS_CLIENTE_QUERY_KEY ||
-              queryKey[0] === TODOS_CLIENTES_QUERY_KEY,
-          });
+  //   mutate(
+  //     {
+  //       customerId: customerId,
+  //       companyId: user?.userId,
+  //     },
+  //     {
+  //       onSuccess: () => {
+  //         queryClient.invalidateQueries({
+  //           predicate: ({ queryKey }) =>
+  //             queryKey[0] === AGENDA_BY_CLIENTE_ID_QUERY_KEY ||
+  //             queryKey[0] === TODOS_AGENDAS_QUERY,
+  //         });
 
-          toast({ title: "Cliente excluído com sucesso!" });
-        },
-        onError: (error) => {
-          toast({
-            title: "Erro ao excluir cliente",
-            description: `${errorHandler(error).message}`,
-          });
-        },
-      }
-    );
-  };
+  //         toast({ title: "Cliente excluído com sucesso!" });
+  //       },
+  //       onError: (error) => {
+  //         toast({
+  //           title: "Erro ao excluir cliente",
+  //           description: `${errorHandler(error).message}`,
+  //         });
+  //       },
+  //     }
+  //   );
+  // };
+
   return (
     <div>
       <DropdownMenu>
@@ -82,49 +83,46 @@ export const Acoes = ({ customerId }: AcoesProps) => {
             </DropdownMenuLabel>
           </SheetSchedule>
           <DropdownMenuSeparator />
+          <SheetAtendimento customerId={customerId}>
+            <DropdownMenuLabel className="cursor-pointer">
+              Iniciar atendimento
+            </DropdownMenuLabel>
+          </SheetAtendimento>
 
-          <DropdownMenuItem>Iniciar atendimento</DropdownMenuItem>
-          {user?.role === Role.ADMIN && (
-            <>
-              <DropdownMenuSeparator />
+          {/* <DropdownMenuSeparator />
 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div className="cursor-pointer hover:text-rose-900">
-                    <DropdownMenuLabel>Excluir</DropdownMenuLabel>
-                  </div>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Excluir este cliente de forma permanente?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Ao excluir este cliente, todos os dados relacionados serão
-                      excluídos permanentemente. Esta ação não pode ser
-                      desfeita.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <div className="flex justify-between w-full">
-                      <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => {
-                          handleDelete();
-                        }}
-                      >
-                        {isPending ? (
-                          <Loader2 className="animate-spin" />
-                        ) : (
-                          "Confirmar"
-                        )}
-                      </AlertDialogAction>
-                    </div>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </>
-          )}
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <div className="cursor-pointer hover:text-rose-900">
+                <DropdownMenuLabel>Excluir</DropdownMenuLabel>
+              </div>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Excluir Agenda?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  O usuário ainda poderá criar um novo agendamento para este
+                  cliente.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <div className="flex justify-between w-full">
+                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      handleDelete();
+                    }}
+                  >
+                    {isPending ? (
+                      <Loader2 className="animate-spin" />
+                    ) : (
+                      "Confirmar"
+                    )}
+                  </AlertDialogAction>
+                </div>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog> */}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -6,6 +6,7 @@ import {
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { timeToDate } from 'src/helper/timeToDate';
 
 @Injectable()
 export class ContactService {
@@ -22,7 +23,7 @@ export class ContactService {
 
         this.prisma.customerCompany.findFirst({
           where: {
-            customerId: createContactDto.costumerId,
+            customerId: createContactDto.customerId,
             companyId: createContactDto.companyId,
           },
           include: {
@@ -67,16 +68,26 @@ export class ContactService {
             end: new Date(createContactDto.end),
             comments: createContactDto.comments,
             companyId: createContactDto.companyId,
-            customerId: createContactDto.costumerId,
+            customerId: createContactDto.customerId,
             userId: createContactDto.userId,
             occurrenceId: createContactDto.occurenceId,
             otherOccurrenceId: otherOccurenceId ? otherOccurenceId.id : null,
           },
         });
 
+        await this.prisma.schedule.update({
+          where: {
+            customerId: createContactDto.customerId,
+          },
+          data: {
+            next_return: new Date(createContactDto.next_return),
+            time_preference: timeToDate(createContactDto.time_preference),
+          },
+        });
+
         await this.prisma.customer.update({
           where: {
-            id: createContactDto.costumerId,
+            id: createContactDto.customerId,
           },
           data: {
             ...(!customerCompany.customer.first_contact
