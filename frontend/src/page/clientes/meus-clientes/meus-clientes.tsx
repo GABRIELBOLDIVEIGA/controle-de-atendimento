@@ -1,14 +1,14 @@
 import { DataTable } from "@/components/ui/data-table";
-import { useCustomerDataTable } from "./useCustomerDataTable";
 import { columns } from "./columns";
+import { useMeusClientes } from "@/hooks/useQueries/clientes/useMeusCliente";
 
 export const MeusClientes = () => {
-  const dataTable = useCustomerDataTable();
+  const { data } = useMeusClientes();
 
   return (
     <section className="flex justify-center pt-10">
       <div className="w-10/12">
-        <DataTable data={dataTable ?? []} columns={columns} />
+        <DataTable data={data ?? []} columns={columns} />
       </div>
     </section>
   );

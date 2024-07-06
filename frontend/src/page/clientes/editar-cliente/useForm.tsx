@@ -5,7 +5,10 @@ import { useUpdateAgenda } from "@/hooks/useMutations/agenda/useUpdateAgenda";
 import { useUpdateEndereco } from "@/hooks/useMutations/endereco/useUpdateEndereco";
 import { useAgendaByClienteId } from "@/hooks/useQueries/agenda/useAgendaByClienteId";
 import { useCliente } from "@/hooks/useQueries/clientes/useCliente";
+import { MEUS_CLIENTE_QUERY_KEY } from "@/hooks/useQueries/clientes/useMeusCliente";
+import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
 import { useEnderecoByClienteId } from "@/hooks/useQueries/enderecos/useEnderecoByClienteId";
+import { queryClient } from "@/lib/tanstack-react-query";
 import { useAuthStore } from "@/store/auth.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -169,6 +172,11 @@ export const useFormEditarCliente = () => {
     mutate(data, {
       onSuccess: () => {
         toast({ title: "Cliente editado com sucesso!" });
+        queryClient.invalidateQueries({
+          predicate: (query) =>
+            query.queryKey[0] === TODOS_CLIENTES_QUERY_KEY ||
+            query.queryKey[0] === MEUS_CLIENTE_QUERY_KEY,
+        });
       },
       onError: (error) => {
         toast({

@@ -26,6 +26,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { errorHandler } from "@/helpers/error-handler";
 import { Link, useNavigate } from "react-router-dom";
 import { queryClient } from "@/lib/tanstack-react-query";
+import { MEUS_CLIENTE_QUERY_KEY } from "@/hooks/useQueries/clientes/useMeusCliente";
 
 interface AcoesProps {
   customerId: number;
@@ -48,8 +49,9 @@ export const Acoes = ({ customerId }: AcoesProps) => {
       {
         onSuccess: () => {
           queryClient.invalidateQueries({
-            predicate: (query) =>
-              query.queryKey[0] === TODOS_CLIENTES_QUERY_KEY,
+            predicate: ({ queryKey }) =>
+              queryKey[0] === MEUS_CLIENTE_QUERY_KEY ||
+              queryKey[0] === TODOS_CLIENTES_QUERY_KEY,
           });
         },
         onError: (error) => {

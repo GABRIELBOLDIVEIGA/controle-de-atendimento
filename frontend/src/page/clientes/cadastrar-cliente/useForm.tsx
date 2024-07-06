@@ -1,6 +1,9 @@
 import { useToast } from "@/components/ui/use-toast";
 import { errorHandler } from "@/helpers/error-handler";
 import { useApi } from "@/hooks/useApi";
+import { MEUS_CLIENTE_QUERY_KEY } from "@/hooks/useQueries/clientes/useMeusCliente";
+import { TODOS_CLIENTES_QUERY_KEY } from "@/hooks/useQueries/clientes/useTodosClientes";
+import { queryClient } from "@/lib/tanstack-react-query";
 import { useAuthStore } from "@/store/auth.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -77,6 +80,11 @@ export const useFormCadastrarCliente = () => {
     mutate(data, {
       onSuccess: () => {
         toast({ title: "Cliente cadastrado com sucesso!" });
+        queryClient.invalidateQueries({
+          predicate: ({ queryKey }) =>
+            queryKey[0] === TODOS_CLIENTES_QUERY_KEY ||
+            queryKey[0] === MEUS_CLIENTE_QUERY_KEY,
+        });
       },
       onError: (error) => {
         toast({

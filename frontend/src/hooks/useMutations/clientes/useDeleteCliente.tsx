@@ -14,7 +14,7 @@ export const useDeleteCliente = () => {
       companyId: number;
     }) => {
       return await api.delete(
-        `/customer/hard-delete/${customerId}/${companyId}/`
+        `/customer/hard-delete/${customerId}/${companyId}`
       );
     },
   });
