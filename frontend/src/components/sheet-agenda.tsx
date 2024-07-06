@@ -42,6 +42,7 @@ import { TODOS_AGENDAS_QUERY } from "@/hooks/useQueries/agenda/useTodasAgendas";
 import { queryClient } from "@/lib/tanstack-react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { errorHandler } from "@/helpers/error-handler";
+import { AGENDA_BY_USER_ID_QUERY_KEY } from "@/hooks/useQueries/agenda/useAgendaByUserId";
 
 const formSchema = z.object({
   customerId: z.coerce.number().int().positive(),
@@ -114,7 +115,8 @@ const useFormAgenda = () => {
           queryClient.invalidateQueries({
             predicate: ({ queryKey }) =>
               queryKey[0] === AGENDA_BY_CLIENTE_ID_QUERY_KEY ||
-              queryKey[0] === TODOS_AGENDAS_QUERY,
+              queryKey[0] === TODOS_AGENDAS_QUERY ||
+              queryKey[0] === AGENDA_BY_USER_ID_QUERY_KEY,
           });
           toast({ title: "Agenda atualizada com sucesso!" });
         },
