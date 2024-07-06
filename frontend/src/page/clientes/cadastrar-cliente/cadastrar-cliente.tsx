@@ -113,7 +113,7 @@ export const CadastrarCliente = () => {
                             mode="single"
                             selected={new Date(`${field.value}`)}
                             onSelect={field.onChange}
-                            disabled={(date) => date < subDays(new Date(), 1)}
+                            // disabled={(date) => date < subDays(new Date(), 1)}
                             initialFocus
                             locale={ptBR}
                           />
@@ -156,7 +156,7 @@ export const CadastrarCliente = () => {
                             mode="single"
                             selected={new Date(`${field.value}`)}
                             onSelect={field.onChange}
-                            disabled={(date) => date < subDays(new Date(), 1)}
+                            // disabled={(date) => date < subDays(new Date(), 1)}
                             initialFocus
                             locale={ptBR}
                           />

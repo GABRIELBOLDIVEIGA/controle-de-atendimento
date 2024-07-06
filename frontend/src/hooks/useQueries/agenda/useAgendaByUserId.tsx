@@ -53,7 +53,6 @@ export const useAgendaByUserId = () => {
       const { data } = await api.get<AgendaByUsuarioId[]>(
         `/schedule/user/${user?.userId}`
       );
-      console.log("data", data);
 
       const filter = data.filter((schedule) => {
         if (agendaSchema.safeParse(schedule).success) {
